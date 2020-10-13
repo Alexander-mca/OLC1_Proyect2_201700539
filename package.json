@@ -1,0 +1,11 @@
+{
+  "name": "proyecto2",
+  "version": "1.0.0",
+  "description": "Traductores de java a js y python",
+  "main": "index.js",
+  "scripts": {
+    "build":"tsc -w"
+  },
+  "author": "Alex Morales",
+  "license": "ISC"
+}
