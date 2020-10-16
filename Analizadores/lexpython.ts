@@ -39,6 +39,7 @@ enum Tipo{
     or,
     and,
     xor,
+    not,
     mas,
     masmas,
     menosmenos,
@@ -72,6 +73,7 @@ enum Tipo{
     rfalse,
     rfor,
     rpublic,
+    args,
     rprivate,
     rprotected,
     rint,
@@ -85,6 +87,7 @@ enum Tipo{
     rstatic,
     rmain,
     rinterface,
+    dolar,
 
 }
 
@@ -165,8 +168,7 @@ class Scanner{
                             break;
                         case '!':
                             lexema+=c;
-                            this.tokens.push(new Token(lexema,Tipo.diferente,fila,columna));
-                            lexema="";
+                            estado=7;
                             break;
                         case ';':
                             lexema+=c;
@@ -288,6 +290,19 @@ class Scanner{
                 lexema="";
                 estado=0;
                 break;
+            case 7:
+                if(c=='='){
+                    lexema+=c;
+                    this.tokens.push(new Token(lexema,Tipo.diferente,fila,columna));
+                    lexema="";
+                    estado=0;
+                    continue;
+                }
+                this.tokens.push(new Token(lexema,Tipo.not,fila,columna));
+                lexema="";
+                estado=0;
+                i--;
+                break;
             case 8:
                 lexema+=c;
                 if(c=='*'){
@@ -404,6 +419,8 @@ class Scanner{
                 return Tipo.rstring;
             case "char":
                 return Tipo.rchar;
+            case "args":
+                return Tipo.args;
             case "return":
                 return Tipo.rreturn;
             case "break":
