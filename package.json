@@ -4,7 +4,8 @@
   "description": "Traductores de java a js y python",
   "main": "index.js",
   "scripts": {
-    "build":"tsc -w"
+    "build":"tsc -w",
+    "start":"go run Go/app.go"
   },
   "author": "Alex Morales",
   "license": "ISC"

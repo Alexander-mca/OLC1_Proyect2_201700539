@@ -1,0 +1,41 @@
+version: "3"
+services:
+  frontend:
+    container_name: goserver
+    image: goweb:v1
+    ports:
+      - "8000:8000"
+    environment:
+      - GOIP=182.18.7.9
+      - GOPORT=8000
+      - NODEIP=182.18.7.7
+      - NODEPORT=3000
+    volumes:
+      - ./Go:/App/
+    networks:
+      testing_net:
+            ipv4_address: 182.18.7.9
+    depends_on:
+      - backend
+  backend:
+    container_name: nodeserver
+    image: nodeweb:v1
+    ports:
+      - "3000:3000"
+    environment:
+      - NODEIP=182.18.7.7
+      - NODEPORT=3000
+    volumes:
+      - ./Node:/App/
+      - /App/node_modules
+    networks:
+      testing_net:
+            ipv4_address: 182.18.7.7
+
+networks:
+    testing_net:
+        ipam:
+            driver: default
+            config:
+                - subnet: 182.18.7.0/24
+        
