@@ -1,0 +1,20 @@
+{
+  "name": "Node_Api_JS",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "grammar": "jison src/Analizador/parser.jison -o src/Analizador/parser.js",
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "eol": "^0.9.1",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.6"
+  }
+}

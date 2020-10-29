@@ -1,9 +1,9 @@
-// function doClick() {
-//     var el = document.getElementById("file-input");
-//     if (el) {
-//       el.click();
-//     }
-//   }
+function doClick() {
+    var el = document.getElementById("file-input");
+    if (el) {
+      el.click();
+    }
+  }
 function leerArchivo(e) {
     var archivo = e.target.files[0];
     if (!archivo) {
@@ -19,7 +19,7 @@ function leerArchivo(e) {
   
   function mostrarContenido(contenido) {
     var elemento = document.getElementById('text1');
-    elemento.innerHTML = contenido;
+    elemento.innerText = contenido;
   }
 var _validFileExtensions = [".java", ".mia", ".txt"];    
 function ValidateSingleInput(oInput) {

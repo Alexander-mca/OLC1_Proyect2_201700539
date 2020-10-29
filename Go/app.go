@@ -10,7 +10,7 @@ import (
 	"os"
 )
 
-const port = "8080"
+const port = ""
 
 type Texto struct {
 	Value string `json:"value"`
@@ -20,42 +20,42 @@ var nodeURL = ""
 
 func main() {
 	//================= NODE API =================//
-	//nodeip, defip := os.LookupEnv("NODEIP")
+	nodeip, defip := os.LookupEnv("NODEIP")
 	nodeport, defport := os.LookupEnv("NODEPORT")
 
-	// if !defip {
-	// 	nodeip = "182.18.7.7"
-	// }
+	if !defip {
+		nodeip = "182.18.7.7"
+	}
 
 	if !defport {
 		nodeport = "3000"
 	}
 
-	nodeURL = "http://localhost:" + nodeport
+	nodeURL = nodeip + nodeport
 
 	//==================== GO ====================//
-	//ip, defip := os.LookupEnv("GOIP")
+	ip, defip := os.LookupEnv("GOIP")
 	port, defport := os.LookupEnv("GOPORT")
 
-	// if !defip {
-	// 	ip = "182.18.7.9"
-	// }
+	if !defip {
+		ip = "182.18.7.9"
+	}
 
 	if !defport {
-		port = "8000"
+		port = "8080"
 	}
-	fs := http.FileServer(http.Dir("Go/src"))
+	fs := http.FileServer(http.Dir("./src"))
 	http.Handle("/", fs)
 	//http.HandleFunc("/", index)
 	http.HandleFunc("/Analiza", getInfo)
 
-	fmt.Println("Server on PORT:" + port)
+	fmt.Println("Server on " + ip + ":" + port)
 
 	http.ListenAndServe(":"+port, nil)
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
-	t := template.Must(template.ParseFiles("Go/src/index.html"))
+	t := template.Must(template.ParseFiles("./src/index.html"))
 	t.Execute(w, "")
 }
 
