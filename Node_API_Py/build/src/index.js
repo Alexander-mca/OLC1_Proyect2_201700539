@@ -45,8 +45,8 @@ var morgan_1 = __importDefault(require("morgan")); //se pueden ver las peticione
 var cors_1 = __importDefault(require("cors"));
 var indexRoutes_1 = __importDefault(require("./routes/indexRoutes"));
 var body_parser_1 = __importDefault(require("body-parser"));
-var ip = process.env.NODEIP || "127.18.7.7";
-var port = process.env.NODEPORT || 3000;
+var ip = process.env.NODEIPPY || "127.18.7.7";
+var port = process.env.NODEPORTPY || 3000;
 var Server = /** @class */ (function () {
     function Server() {
         this.app = express_1.default(); //express() devuelve un objeto
@@ -56,7 +56,7 @@ var Server = /** @class */ (function () {
     Server.prototype.config = function () {
         this.app.use(body_parser_1.default.json());
         this.app.set('port', port); //el process es para que si ya existe un puerto definido se toma eso
-        //this.app.set('ip',ip);
+        this.app.set('ip', ip);
         this.app.use(morgan_1.default('dev')); //el dev es para ver lo que estan pidiendo los clientes
         this.app.use(cors_1.default()); //pedir los datos del servidor
         this.app.use(body_parser_1.default.json()); //para que entienda el formato json y guarda en un req.body
@@ -68,9 +68,10 @@ var Server = /** @class */ (function () {
     };
     Server.prototype.start = function () {
         var _this = this;
-        this.app.listen(this.app.get('port') /*,this.app.get('ip')*/, function () { return __awaiter(_this, void 0, void 0, function () {
+        this.app.listen(this.app.get('ip'), this.app.get('port'), function () { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                console.log('IP: %s PORT: %d', ip, port);
+                //console.log('IP: %s PORT: %d', ip, port);
+                console.log('Server on Port %d', port);
                 return [2 /*return*/];
             });
         }); });

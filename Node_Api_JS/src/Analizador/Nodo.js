@@ -2,6 +2,10 @@ class Nodo{
     constructor(nombre){
         this.nombre=nombre;        
         this.hijos=[];
+        this.id="";
+    }
+    setId(id){
+        this.id=id;
     }
     push(hijo){
         this.hijos.push(hijo);
@@ -11,6 +15,9 @@ class Nodo{
     }
     setContenido(contenido){
         this.contenido=contenido;
+    }
+    getId(){
+        return this.id;
     }
     getNombre(){
         return this.nombre;

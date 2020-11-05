@@ -14,8 +14,7 @@ const  port=process.env.NODEPORTJS || 3080;
 app.use(morgan('dev'));
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+//app.use(express.urlencoded({ extended: false }));
 
 //routes
 app.use('/',indexRoutes);
@@ -23,6 +22,7 @@ app.use('/',indexRoutes);
 
 
 //run
-app.listen(port,ip, async() => {
+app.listen(ip,port, async() => {
     console.log('IP: %s PORT: %d', ip, port);
+    //console.log('Server on Port %d',port);
 })

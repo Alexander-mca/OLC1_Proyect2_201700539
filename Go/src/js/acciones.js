@@ -1,59 +1,113 @@
+function AgregarVentana(){
+  var tabs=document.getElementById('headerp');
+  var tab=document.createElement('li');
+  var atributo=document.createAttribute('class');
+  atributo.value="nav-item";
+  tab.setAttributeNode(atributo);
+
+  var link=document.createElement('a');
+  link.setAttribute("class","nav-link");
+  link.setAttribute("data-toggle","tab");
+  link.setAttribute("href","#tab"+cont);
+  link.setAttribute("ondragend","eliminarTab(this);");
+  link.innerText="tab"+cont;
+  tab.appendChild(link);
+  tabs.appendChild(tab);
+
+  //se crea el textarea
+  var content=document.getElementById('myTabContent');
+  var div=document.createElement('div');
+  div.setAttribute("class","tab-pane fade");
+  div.setAttribute("id","tab"+cont);
+
+  var text=document.createElement('textarea');
+  text.setAttribute("id","pestania"+cont);
+  text.setAttribute("rows","21");
+  text.setAttribute("cols","60");
+  div.appendChild(text);
+  content.appendChild(div);
+  cont++;
+  return link;
+}
+function eliminarTab(tab){
+
+  var nombre=tab.innerText;
+  var tabs=document.getElementById('headerp');
+  tabs.childNodes.forEach(element => {
+      if(element.firstChild!=null){
+        var name=element.firstChild.innerText;
+        if(nombre==name){
+          element.remove();
+        }
+      }
+      
+  });
+  var content=document.getElementById(nombre);
+  var name=content.getAttribute("id");
+  if(content!=null && name==nombre){
+    content.remove();
+  }
+}
+var cont=2;
 function doClick() {
-    var el = document.getElementById("file-input");
-    if (el) {
-      el.click();
+    var e = document.getElementById("file-input");
+    if (e) {
+      e.click();
     }
   }
-function leerArchivo(e) {
-    var archivo = e.target.files[0];
-    if (!archivo) {
+  function readSingleFile(e) {
+    var file = e.target.files[0];
+    if (!file) {
       return;
     }
-    var lector = new FileReader();
-    lector.onload = function(e) {
-      var contenido = e.target.result;
-      mostrarContenido(contenido);
+    
+    var reader = new FileReader();
+    reader.onload = function(file) {
+      var contents = file.target.result;
+      var nombre=document.getElementById('file-input').files[0].name;
+      var name=nombre.split(".");
+      console.log(name[0]);
+      displayContents(name[0],contents);        
     };
-    lector.readAsText(archivo);
+    reader.readAsText(file);
   }
   
-  function mostrarContenido(contenido) {
-    var elemento = document.getElementById('text1');
-    elemento.innerText = contenido;
+ 
+  function displayContents(nombre,contents){
+    var content=document.getElementById('headerp');
+    var item=content.childNodes;
+    item.forEach(element=>{
+      if(element!=null){
+          var child=element.childNodes;
+          child.forEach(chl=>{
+            var aux=chl.innerText;
+            if(chl!=null && aux!=undefined){
+              if(aux!="tab1"){
+                chl=AgregarVentana();
+             }
+
+               chl.setAttribute("href","#"+nombre);
+               aux=chl.innerText;
+               chl.innerText=nombre+".java";
+               var sub=aux.substring(3,aux.lenght);
+               var info=document.getElementById(aux);
+                 info.setAttribute("id",nombre);
+                 var data=document.getElementById("pestania"+sub);
+                 if(data!=null){
+                   data.textContent=contents;
+                 }
+               return null;
+            }
+          });
+        }
+    });
   }
-var _validFileExtensions = [".java", ".mia", ".txt"];    
-function ValidateSingleInput(oInput) {
-       if (oInput.type == "file") {
-           var sFileName = oInput.value;
-           var extension=sFileName.split(".")
-            if (sFileName.length > 0) {
-               var blnValid = false;
-               for (var j = 0; j < _validFileExtensions.length; j++) {
-                   var sCurExtension = _validFileExtensions[j];
-                   if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
-                       blnValid = true;
-                       break;
-                   }
-               }
-                
-               if (!blnValid) {
-                   alert("Lo sentimos; pero '." + extension[1] + "' no es una extension valida, extensiones validas: " + _validFileExtensions.join(", "));
-                   oInput.value = "";
-                   return false;
-               }else{
-                leerArchivo(oInput);
-               }
-           }
-       }
-}
-function AgregarVentana(){
-    
-}
+document.getElementById('file-input').addEventListener('change',readSingleFile,false);
 
 
 function ObtenerTexto(){
   var url="../Analiza";
-  var texto=document.getElementById("text1").value;
+  var texto=document.getElementById("pestania1").value;
   var valor={"Value":texto}
   var defaultBody={
     method:'POST',
@@ -65,14 +119,20 @@ function ObtenerTexto(){
 
   fetch(url,defaultBody).then(res=>res.json())
   .catch(error => console.log('Error:', error))
-  .then(response => console.log('Success:', response));
+  .then(response => view(response));
 
 }
 
 function view(response){
-    console.log(response.Value.Python.Traduccion);
-    document.getElementById("cmdpy").value = response.Value.Python.Traduccion;
+    var js=response.Javascript;
+    var py=response.Python;
+    var consolapy=document.getElementById('cmdpy');
+    var consolajs=document.getElementById('cmdjs');
+    consolapy.removeAttribute('disabled');
+    consolajs.removeAttribute('disabled');
+    consolapy.textContent = py.Traduccion;
+    consolajs.textContent=js.Traduccion;
+    consolajs.setAttribute('disabled','');
+    consolapy.setAttribute('disabled','');
     console.log("Si entró");
 }
-//   document.getElementById('file-input')
-//     .addEventListener('change', ValidateSingleInput, false);

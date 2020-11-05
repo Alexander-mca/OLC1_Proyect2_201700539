@@ -1,27 +1,26 @@
-version: "3"
+version: "3.8"
 services:
   frontend:
     container_name: goserver
-    image: goweb:latest
+    image: alexandermca/goweb:2.1
     ports:
       - "8080:8080"
     environment:
-      - GOIP=127.18.7.9
       - GOPORT=8080
-      - NODEIPPY=127.18.7.7
-      - NODEIPJS=127.18.7.5
+      - GOIP=127.18.7.9
       - NODEPORTPY=3000
       - NODEPORTJS=3080
     volumes:
       - ./Go:/App/
-    networks:
+    networks: 
       testing_net:
-            ipv4_address: 127.18.7.9
+        ipv4_address: 127.18.7.9
     depends_on:
-      - backend
-  backend:
+      - webjs
+      - webpy
+  webpy:
     container_name: nodeserverpy
-    image: nodewebpy:latest
+    image: alexandermca/nodewebpy:2.1
     ports:
       - "3000:3000"
     environment:
@@ -33,24 +32,12 @@ services:
     networks:
       testing_net:
             ipv4_address: 127.18.7.7
-    container_name: nodeserverjs
-    image: nodewebjs:latest
-    ports:
-      - "3080:3080"
-    environment:
-      - NODEIPJS=127.18.7.5
-      - NODEPORTJS=3080
-    volumes:
-      - ./NodeJS:/App/
-      - /App/node_modules
-    networks:
-      testing_net:
-            ipv4_address: 127.18.7.5
-
 networks:
-    testing_net:
-        ipam:
-            driver: default
-            config:
-                - subnet: 127.18.7.0/24
+  testing_net:
+      ipam:
+          driver: default
+          config:
+              - subnet: 127.18.7.0/24
+
+
         

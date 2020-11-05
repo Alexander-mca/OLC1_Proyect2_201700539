@@ -9,7 +9,7 @@ var IndexRoutes = /** @class */ (function () {
     }
     IndexRoutes.prototype.config = function () {
         this.router.get('/', indexControllers_1.indexController.index);
-        this.router.get('/Data', indexControllers_1.indexController.Analisis);
+        this.router.post('/Data', indexControllers_1.indexController.Analisis);
     };
     return IndexRoutes;
 }());

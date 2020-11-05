@@ -11,46 +11,67 @@ import (
 )
 
 const port = ""
+const ip = ""
 
 type Texto struct {
 	Value string `json:"value"`
 }
 
-var nodeURL = ""
+var nodeURLJS = ""
+var nodeURLPY = ""
+
+type DataResponse struct {
+	Javascript string
+	Python     string
+}
 
 func main() {
-	//================= NODE API =================//
-	nodeip, defip := os.LookupEnv("NODEIP")
-	nodeport, defport := os.LookupEnv("NODEPORT")
+
+	//================= NODE API JS =================//
+	nodeip, defip := os.LookupEnv("NODEIPJS")
+	nodeport, defport := os.LookupEnv("NODEPORTJS")
 
 	if !defip {
-		nodeip = "182.18.7.7"
+		nodeip = "127.18.7.5:"
+	}
+
+	if !defport {
+		nodeport = "3080"
+	}
+
+	nodeURLJS = nodeip + nodeport
+
+	//================= NODE API PY =================//
+	nodeip, defip = os.LookupEnv("NODEIPPY")
+	nodeport, defport = os.LookupEnv("NODEPORTPY")
+
+	if !defip {
+		nodeip = "127.18.7.7:"
 	}
 
 	if !defport {
 		nodeport = "3000"
 	}
 
-	nodeURL = nodeip + nodeport
+	nodeURLPY = nodeip + nodeport
 
 	//==================== GO ====================//
 	ip, defip := os.LookupEnv("GOIP")
 	port, defport := os.LookupEnv("GOPORT")
 
 	if !defip {
-		ip = "182.18.7.9"
+		ip = "localhost"
 	}
 
 	if !defport {
 		port = "8080"
 	}
-	fs := http.FileServer(http.Dir("./src"))
+	fs := http.FileServer(http.Dir("./src/"))
 	http.Handle("/", fs)
 	//http.HandleFunc("/", index)
 	http.HandleFunc("/Analiza", getInfo)
 
 	fmt.Println("Server on " + ip + ":" + port)
-
 	http.ListenAndServe(":"+port, nil)
 }
 
@@ -60,7 +81,8 @@ func index(w http.ResponseWriter, r *http.Request) {
 }
 
 func getInfo(w http.ResponseWriter, r *http.Request) {
-	var url = nodeURL + "/Data"
+	var url = "localhost:3080/Data"
+	var urlpy = "localhost:3000/Data"
 
 	var decoder = json.NewDecoder(r.Body)
 	var c Texto
@@ -70,6 +92,7 @@ func getInfo(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var jsonStr = []byte(`{"Value":"` + c.Value + `"}`)
+	//Aqui se hace la peticion a la api rest js
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
 	req.Header.Set("Content-Type", "application/json")
 
@@ -80,11 +103,30 @@ func getInfo(w http.ResponseWriter, r *http.Request) {
 	}
 
 	defer resp.Body.Close()
-	bodyBytes, _ := ioutil.ReadAll(resp.Body)
+	bodyBytesjs, _ := ioutil.ReadAll(resp.Body)
+	Datajs := string(bodyBytesjs)
+	//aqui se hace la peticion a la api rest py
+	req, err = http.NewRequest("POST", urlpy, bytes.NewBuffer(jsonStr))
+	req.Header.Set("Content-Type", "application/json")
 
-	fmt.Println(string(bodyBytes))
+	client = &http.Client{}
+	resp, err = client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+
+	defer resp.Body.Close()
+	bodyBytespy, _ := ioutil.ReadAll(resp.Body)
+	datapy := string(bodyBytespy)
+	//guardamos las respuestas en un struct
+	response := DataResponse{Javascript: Datajs, Python: datapy}
+	respjson, error2 := json.Marshal(response)
+	if error2 != nil {
+		fmt.Printf(error2.Error())
+	}
+	fmt.Println(string(respjson))
 	fmt.Println("Se queda en getInfo")
-	fmt.Fprintf(w, string(bodyBytes))
+	fmt.Fprintf(w, string(respjson))
 }
 
 func PostTextoHandler(w http.ResponseWriter, r *http.Request) {

@@ -1,5 +1,5 @@
-FROM node:15
-WORKDIR /App
+FROM node:15.0
+WORKDIR /app
 COPY package*.json ./
 RUN npm install
 RUN npm i nodemon morgan cors express
