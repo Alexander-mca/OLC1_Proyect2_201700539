@@ -9,6 +9,8 @@ class IndexRoutes{
     config(){
         this.router.get('/',indexController.Index);
         this.router.post('/Data/',indexController.Analisis);
+        this.router.get('/arbol',indexController.MostrarArbol);
+        this.router.get('/ErroresJS',indexController.MostrarErrores);
     }
 }
 const indexRoutes=new IndexRoutes();

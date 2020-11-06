@@ -1,7 +1,7 @@
 /*------------------------------------------------IMPORTACIONES----------------------------------------------*/
 %{
 //importaciones
-        let Nodo=require('./Nodo.js');
+        const Nodo=require('./Nodo').Nodo;
         let traduccion="";
         let Errores=[];
         let tabs="";
@@ -86,7 +86,7 @@
 
 <<EOF>>       return 'EOF';   
 
-.	        {Errores.push(('Error Lexico',"El Caracter '"+yytext +"' no pertenece al lenguaje.",yylloc.first_line, yylloc.first_column));} 
+.	        {Errores.push(['Error Lexico',"El Caracter '"+yytext +"' no pertenece al lenguaje.",yylloc.first_line, yylloc.first_column]);} 
   
 
 /lex
@@ -104,7 +104,7 @@
 
 %% /* Definición de la gramática */
 
-INICIO:CLASES EOF {$$=new Nodo('CLASES');
+INICIO:CLASES EOF {$$=new Nodo('INICIO');
                 $$.push($1);
                 var errores=Errores; 
                 Errores=[];
@@ -116,12 +116,12 @@ CLASES: CLASES CLASE {$$=new Nodo('CLASES'); $$.push($1);$$.push($2);}
 CLASE: rpublic TCLASS id BLOQUEC {$$=new Nodo('CLASE');$$.push(new Nodo($1));
                 $$.push($2);$$.push(new Nodo($3));$$.push($4);
                 }
-        |error llaveder         {Errores.push(('Error Sintáctico',"Se encontró '"+yytext+"' y se esperaba: una expresion.",this._$.first_line,this._$.first_column));
+        |error llaveder         {Errores.push(['Error Sintáctico',"Se encontró '"+yytext+"' y se esperaba: una expresion.",this._$.first_line,this._$.first_column ]);$$=new Nodo('CLASE');$$.push(new Nodo("error '"+yytext+"'"));
                                console.log('Error Sintactico, se encontro ('+yytext+') y se esperaba public, int,char,string,double o boolean. En linea:'+this._$.first_line+', Columna:'+this._$.first_column);}
 ;
-TCLASS: rclass {$$=new Nodo('TCLASS');$$.push($1);
+TCLASS: rclass {$$=new Nodo('TCLASS');$$.push(new Nodo($1));
                  }
-            |rinterface {$$=new Nodo('TCLASS');$$.push($1)
+            |rinterface {$$=new Nodo('TCLASS');$$.push(new Nodo($1));
              
                 }
 ;
@@ -141,7 +141,7 @@ VARIASIC: VARIASIC INSTCLASE    {$$=new Nodo('VARIASIC');$$.push($1);$$.push($2)
 
 INSTCLASE: FUNMET               {$$=new Nodo('INSTCLASE');$$.push($1); }
             |DECLARACION        {$$=new Nodo('INSTCLASE');$$.push($1);}
-            |error puntoycoma   {Errores.push(('Error Sintáctico',"Se encontró '"+yytext+"' y se esperaba: una expresion.",this._$.first_line,this._$.first_column));
+            |error puntoycoma   {Errores.push(['Error Sintáctico',"Se encontró '"+yytext+"' y se esperaba: una expresion.",this._$.first_line,this._$.first_column]);$$=new Nodo('INSTCLASE');$$.push(new Nodo("error '"+yytext+"'"));
                                 console.log('Error Sintactico, se encontro ('+yytext+') y se esperaba public, int,char,string,double o boolean. En linea:'+this._$.first_line+', Columna:'+this._$.first_column);}
 ;
 DECLARACION: T ASIGNA {$$=new Nodo('DECLARARION');$$.push($1);$$.push($2);}
@@ -174,7 +174,7 @@ FUNMET: rpublic T_FM id parizq PARAMETROS parder T_IC {
                     $$.push(new Nodo($6));$$.push(new Nodo($7)); $$.push(new Nodo($8));
                     $$.push(new Nodo($9));$$.push(new Nodo($10));$$.push($11);
             }
-        |error llaveder   {Errores.push(('Error Sintáctico',"Se encontró '"+yytext+"' y se esperaba: una expresion.",this._$.first_line,this._$.first_column));
+        |error llaveder   {Errores.push(['Error Sintáctico',"Se encontró '"+yytext+"' y se esperaba: una expresion.",this._$.first_line,this._$.first_column]);$$=new Nodo('FUNMET');$$.push(new Nodo("error '"+yytext+"'"));
                                 console.log('Error Sintactico, se encontro ('+yytext+') y se esperaba public, int,char,string,double o boolean. En linea:'+this._$.first_line+', Columna:'+this._$.first_column);}
 ;
 T_IC:   BLOQUEI {$$=new Nodo('T_IC');$$.push($1); }
@@ -228,9 +228,9 @@ INSTRUCCION: FOR                        {$$=new Nodo('INSTRUCCION');$$.push($1);
                                          }
                 | IMPRIMIR puntoycoma   {$$=new Nodo('INSTRUCCION');$$.push($1);$$.push(new Nodo($2));
                                          }
-                |error puntoycoma       {Errores.push(('Error Sintáctico',"Se encontró '"+yytext+"' y se esperaba: una expresion.",this._$.first_line,this._$.first_column));
+                |error puntoycoma       {Errores.push(['Error Sintáctico',"Se encontró '"+yytext+"' y se esperaba: una expresion.",this._$.first_line,this._$.first_column]);$$=new Nodo('INSTRUCCION');$$.push(new Nodo("error '"+yytext+"'"));
                                         console.log('Error Sintactico, se encontro ('+yytext+') y se esperaba public, int,char,string,double o boolean. En linea:'+this._$.first_line+', Columna:'+this._$.first_column);}
-                |error llaveder         {Errores.push(('Error Sintáctico',"Se encontró '"+yytext+"' y se esperaba: una expresion.",this._$.first_line,this._$.first_column));
+                |error llaveder         {Errores.push(['Error Sintáctico',"Se encontró '"+yytext+"' y se esperaba: una expresion.",this._$.first_line,this._$.first_column]);$$=new Nodo('INSTRUCCION');$$.push(new Nodo("error '"+yytext+"'"));
                                         console.log('Error Sintactico, se encontro ('+yytext+') y se esperaba public, int,char,string,double o boolean. En linea:'+this._$.first_line+', Columna:'+this._$.first_column);} 
 ;
 
@@ -318,7 +318,7 @@ EXP_NUMERICA:menos EXP_NUMERICA %prec UMENOS {$$=new Nodo('EXP_NUMERICA');$$.pus
         |LLAMADA                             {$$=new Nodo('EXP_NUMERICA');$$.push($1); }
         |VALOR                               {$$=new Nodo('EXP_NUMERICA');$$.push($1); }
         |id                                  {$$=new Nodo('EXP_NUMERICA');$$.push(new Nodo($1)); }
-        |parizq error parder                 {Errores.push(('Error Sintáctico',"Se encontró '"+yytext+"' y se esperaba: una expresion.",this._$.first_line,this._$.first_column));
+        |parizq error parder                 {Errores.push(['Error Sintáctico',"Se encontró '"+yytext+"' y se esperaba: una expresion.",this._$.first_line,this._$.first_column]);$$=new Nodo('EXP_NUMERICA');$$.push(new Nodo("error '"+yytext+"'"));
                                              console.log('Error Sintactico, se encontro ('+yytext+') y se esperaba public, int,char,string,double o boolean. En linea:'+this._$.first_line+', Columna:'+this._$.first_column);} 
 ;
     

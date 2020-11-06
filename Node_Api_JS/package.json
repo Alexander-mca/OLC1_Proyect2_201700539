@@ -6,7 +6,7 @@
   "scripts": {
     "grammar": "jison src/Analizador/gramatica2.jison -o src/Analizador/gramatica2.js",
     "traducir":"jison src/Analizador/traduccion.jison -o src/Analizador/traduccion.js",
-    "docker":"docker build -t alexandermca/nodewebjs:2.1 .",
+    "docker":"docker build -t alexandermca/nodewebjs:2.2 .",
     "image":"docker run -d -p 3080:3080 alexandermca/nodewebjs:2.0",
     "dev": "nodemon src/index.js"
   },

@@ -136,4 +136,8 @@ function view(response){
     consolajs.setAttribute('disabled','');
     consolapy.setAttribute('disabled','');
     console.log("Si ***********************************\n");
+    window.open("http://localhost:3080/Arbol","Arbol");
+    window.open("http://localhost:3000/Tokens","Tokens");
+    window.open("http://localhost:3080/ErroresJS","ErroresJS");
+    window.open("http://localhost:3000/ErroresPY","ErroresPY");
 }

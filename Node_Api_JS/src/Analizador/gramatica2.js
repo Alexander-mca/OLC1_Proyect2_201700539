@@ -84,7 +84,7 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
-this.$=new Nodo('CLASES');
+this.$=new Nodo('INICIO');
                 this.$.push($$[$0-1]);
                 var errores=Errores; 
                 Errores=[];
@@ -102,15 +102,15 @@ this.$=new Nodo('CLASE');this.$.push(new Nodo($$[$0-3]));
                 
 break;
 case 5:
-Errores.push(('Error Sintáctico',"Se encontró '"+yytext+"' y se esperaba: una expresion.",this._$.first_line,this._$.first_column));
+Errores.push(['Error Sintáctico',"Se encontró '"+yytext+"' y se esperaba: una expresion.",this._$.first_line,this._$.first_column ]);this.$=new Nodo('CLASE');this.$.push(new Nodo("error '"+yytext+"'"));
                                console.log('Error Sintactico, se encontro ('+yytext+') y se esperaba public, int,char,string,double o boolean. En linea:'+this._$.first_line+', Columna:'+this._$.first_column);
 break;
 case 6:
-this.$=new Nodo('TCLASS');this.$.push($$[$0]);
+this.$=new Nodo('TCLASS');this.$.push(new Nodo($$[$0]));
                  
 break;
 case 7:
-this.$=new Nodo('TCLASS');this.$.push($$[$0])
+this.$=new Nodo('TCLASS');this.$.push(new Nodo($$[$0]));
              
                 
 break;
@@ -137,8 +137,8 @@ break;
 case 13:
 this.$=new Nodo('INSTCLASE');this.$.push($$[$0]);
 break;
-case 14: case 23:
-Errores.push(('Error Sintáctico',"Se encontró '"+yytext+"' y se esperaba: una expresion.",this._$.first_line,this._$.first_column));
+case 14:
+Errores.push(['Error Sintáctico',"Se encontró '"+yytext+"' y se esperaba: una expresion.",this._$.first_line,this._$.first_column]);this.$=new Nodo('INSTCLASE');this.$.push(new Nodo("error '"+yytext+"'"));
                                 console.log('Error Sintactico, se encontro ('+yytext+') y se esperaba public, int,char,string,double o boolean. En linea:'+this._$.first_line+', Columna:'+this._$.first_column);
 break;
 case 15:
@@ -180,6 +180,10 @@ case 22:
                     this.$.push(new Nodo($$[$0-5]));this.$.push(new Nodo($$[$0-4])); this.$.push(new Nodo($$[$0-3]));
                     this.$.push(new Nodo($$[$0-2]));this.$.push(new Nodo($$[$0-1]));this.$.push($$[$0]);
             
+break;
+case 23:
+Errores.push(['Error Sintáctico',"Se encontró '"+yytext+"' y se esperaba: una expresion.",this._$.first_line,this._$.first_column]);this.$=new Nodo('FUNMET');this.$.push(new Nodo("error '"+yytext+"'"));
+                                console.log('Error Sintactico, se encontro ('+yytext+') y se esperaba public, int,char,string,double o boolean. En linea:'+this._$.first_line+', Columna:'+this._$.first_column);
 break;
 case 24:
 this.$=new Nodo('T_IC');this.$.push($$[$0]); 
@@ -246,7 +250,7 @@ this.$=new Nodo('INSTRUCCION');this.$.push($$[$0-1]);this.$.push(new Nodo($$[$0]
                                          
 break;
 case 53: case 54:
-Errores.push(('Error Sintáctico',"Se encontró '"+yytext+"' y se esperaba: una expresion.",this._$.first_line,this._$.first_column));
+Errores.push(['Error Sintáctico',"Se encontró '"+yytext+"' y se esperaba: una expresion.",this._$.first_line,this._$.first_column]);this.$=new Nodo('INSTRUCCION');this.$.push(new Nodo("error '"+yytext+"'"));
                                         console.log('Error Sintactico, se encontro ('+yytext+') y se esperaba public, int,char,string,double o boolean. En linea:'+this._$.first_line+', Columna:'+this._$.first_column);
 break;
 case 55:
@@ -354,7 +358,7 @@ case 92:
 this.$=new Nodo('EXP_NUMERICA');this.$.push(new Nodo($$[$0])); 
 break;
 case 93:
-Errores.push(('Error Sintáctico',"Se encontró '"+yytext+"' y se esperaba: una expresion.",this._$.first_line,this._$.first_column));
+Errores.push(['Error Sintáctico',"Se encontró '"+yytext+"' y se esperaba: una expresion.",this._$.first_line,this._$.first_column]);this.$=new Nodo('EXP_NUMERICA');this.$.push(new Nodo("error '"+yytext+"'"));
                                              console.log('Error Sintactico, se encontro ('+yytext+') y se esperaba public, int,char,string,double o boolean. En linea:'+this._$.first_line+', Columna:'+this._$.first_column);
 break;
 case 94: case 95: case 96: case 97: case 98: case 99:
@@ -613,7 +617,7 @@ _handle_error:
 }};
 
 //importaciones
-        let Nodo=require('./Nodo.js');
+        const Nodo=require('./Nodo').Nodo;
         let traduccion="";
         let Errores=[];
         let tabs="";
@@ -1068,7 +1072,7 @@ case 58:/*se ignoran*/
 break;
 case 59:return 5;   
 break;
-case 60:Errores.push(('Error Lexico',"El Caracter '"+yy_.yytext +"' no pertenece al lenguaje.",yy_.yylloc.first_line, yy_.yylloc.first_column));
+case 60:Errores.push(['Error Lexico',"El Caracter '"+yy_.yytext +"' no pertenece al lenguaje.",yy_.yylloc.first_line, yy_.yylloc.first_column]);
 break;
 }
 },

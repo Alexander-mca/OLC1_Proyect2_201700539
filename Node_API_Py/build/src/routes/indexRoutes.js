@@ -10,6 +10,8 @@ var IndexRoutes = /** @class */ (function () {
     IndexRoutes.prototype.config = function () {
         this.router.get('/', indexControllers_1.indexController.index);
         this.router.post('/Data/', indexControllers_1.indexController.Analisis);
+        this.router.get('/Tokens', indexControllers_1.indexController.MostrarTokens);
+        this.router.get('/ErroresPY', indexControllers_1.indexController.MostrarErrores);
     };
     return IndexRoutes;
 }());

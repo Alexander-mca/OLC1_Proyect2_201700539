@@ -111,7 +111,7 @@ CLASE: rpublic TCLASS id BLOQUEC {
         if($2=="interface"){
                 $$=" ";
         }else{
-        $$=$2+$3+$4;
+                $$=$2+$3+$4;
         }
 }
         |error llaveder          {$$="";}

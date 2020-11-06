@@ -42,6 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.indexController = void 0;
 var lexpython_1 = require("../Analizadores/lexpython");
 var sintacticopy_1 = __importDefault(require("../Analizadores/sintacticopy"));
+var funciones_1 = __importDefault(require("../Analizadores/funciones"));
 var fs_1 = __importDefault(require("fs"));
 var IndexController = /** @class */ (function () {
     function IndexController() {
@@ -56,45 +57,49 @@ var IndexController = /** @class */ (function () {
     };
     IndexController.prototype.Analisis = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var documento, resultado;
+            var documento, resultado, aux, errores;
             return __generator(this, function (_a) {
                 documento = req.body.Value.toString();
                 console.log("*****************************************\n" + documento);
                 console.log("si entra a Analisis en py");
                 lexpython_1.scanner.ejecutar(documento);
                 resultado = sintacticopy_1.default.ejecutar(lexpython_1.scanner);
-                //this.ReporteTokens(scanner.tokens);
-                console.log(resultado.Traduccion);
+                funciones_1.default.ReporteTokens(lexpython_1.scanner.tokens);
+                funciones_1.default.ReporteErrores(resultado.Errores);
+                aux = resultado.Traduccion;
+                errores = funciones_1.default.getErrores(resultado.Errores);
+                resultado.Traduccion = errores + aux;
                 res.send(resultado.Traduccion);
                 return [2 /*return*/];
             });
         });
     };
-    IndexController.prototype.ReporteTokens = function (tokens) {
-        var cont = 0;
-        var contenido = "<html>\n<head>\n<title>Errores</title>\n</head>" +
-            "\n<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css\" integrity=\"sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2\" crossorigin=\"anonymous\">\n<body>";
-        contenido += "\n<table class=\"table table-hover\">\n<thead>\n";
-        contenido += "<tr>\n<th scope=\"col\">No.</th>" +
-            "\n<th scope=\"col\">Tipo</th>\n<th scope=\"col\">Lexema</th>" +
-            "\n<th scope=\"col\">Linea</th>\n<th scope=\"col\">Columna</th>\n</tr>\n</thead>";
-        contenido += "\n<tbody>";
-        tokens.forEach(function (tk) {
-            contenido += "\n<tr class=\"table-info\">\n<td scope=\"row\">" + String(cont) + "</td>" +
-                "\n<td>" + String(tk.tipo) + "</td>" + "\n<td>" + tk.lexema + "</td>";
-            "\n<td>" + String(tk.fila) + "</td>" + "\n<td>" + String(tk.columna) + "</td>\n</tr>";
-            cont++;
+    IndexController.prototype.MostrarTokens = function (req, res) {
+        return __awaiter(this, void 0, void 0, function () {
+            var tk;
+            return __generator(this, function (_a) {
+                if (fs_1.default.existsSync('tokens.html')) {
+                    tk = fs_1.default.readFileSync('tokens.html', 'utf-8');
+                    res.send(tk);
+                }
+                return [2 /*return*/];
+            });
         });
-        contenido += "\n<script src=\"https://code.jquery.com/jquery-3.5.1.slim.min.js\" integrity=\"sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj\" crossorigin=\"anonymous\"></script>" +
-            "\n<script src=\"https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js\" integrity=\"sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx\" crossorigin=\"anonymous\"></script>";
-        contenido += "\n</tbody>\n</table>\n</body>\n</html>";
-        fs_1.default.writeFile('./tokens.html', contenido, function (error) {
-            if (error)
-                console.log(error);
-            else
-                console.log('El archivo fue creado');
+    };
+    IndexController.prototype.MostrarErrores = function (req, res) {
+        return __awaiter(this, void 0, void 0, function () {
+            var err;
+            return __generator(this, function (_a) {
+                if (fs_1.default.existsSync('errores.html')) {
+                    err = fs_1.default.readFileSync('errores.html', 'utf-8');
+                    res.send(err);
+                }
+                else {
+                    res.json({ Info: "No hubieron errores" });
+                }
+                return [2 /*return*/];
+            });
         });
-        window.open('./tokens.html');
     };
     return IndexController;
 }());

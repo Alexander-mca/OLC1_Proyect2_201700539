@@ -1,30 +1,27 @@
 class Nodo{
     constructor(nombre){
-        this.nombre=nombre;        
-        this.hijos=[];
-        this.id="";
+        this._nombre=nombre;        
+        this._hijos=[];
+        this._id=0;
     }
-    setId(id){
-        this.id=id;
+    set Id(id){
+        this._id=id;
     }
     push(hijo){
-        this.hijos.push(hijo);
+        this._hijos.push(hijo);
     }
-    getContenido(){
-        return this.contenido;
+    set Hijos(hijos){
+        this._hijos=hijos;
     }
-    setContenido(contenido){
-        this.contenido=contenido;
+    get Id(){
+        return this._id;
     }
-    getId(){
-        return this.id;
+    get Nombre(){
+        return this._nombre;
     }
-    getNombre(){
-        return this.nombre;
-    }
-    getHijos(){
-        return this.hijos;
+    get Hijos(){
+        return this._hijos;
         
     }
 }
-module.exports=Nodo;
+module.exports.Nodo=Nodo;

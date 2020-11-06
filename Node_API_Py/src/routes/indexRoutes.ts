@@ -9,6 +9,8 @@ class IndexRoutes{
     config():void {
         this.router.get('/',indexController.index)
         this.router.post('/Data/',indexController.Analisis);
+        this.router.get('/Tokens',indexController.MostrarTokens);
+        this.router.get('/ErroresPY',indexController.MostrarErrores);
     }
 }
 const indexRoutes=new IndexRoutes();
