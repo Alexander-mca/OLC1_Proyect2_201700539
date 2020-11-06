@@ -15,10 +15,13 @@ class IndexController{
         //     res.json({Errores_Lexicos:resultado.Errores,Tokens:scanner.tokens,Traduccion:resultado.Traduccion});
         // });
         var documento=req.body.Value.toString();
+        console.log("*****************************************\n"+documento);
+        console.log("si entra a Analisis en py");
         scanner.ejecutar(documento);
         var resultado=Parser.ejecutar(scanner);
-        this.ReporteTokens(scanner.tokens);
-        res.json({Traduccion:resultado.Traduccion});
+        //this.ReporteTokens(scanner.tokens);
+        console.log(resultado.Traduccion);
+        res.send(resultado.Traduccion);
     }
     ReporteTokens(tokens:Token[]){
         var cont=0;

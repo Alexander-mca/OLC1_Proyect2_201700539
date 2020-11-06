@@ -8,7 +8,7 @@ class IndexRoutes{
     }
     config(){
         this.router.get('/',indexController.Index);
-        this.router.post('/Data',indexController.Analisis);
+        this.router.post('/Data/',indexController.Analisis);
     }
 }
 const indexRoutes=new IndexRoutes();

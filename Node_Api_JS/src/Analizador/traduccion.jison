@@ -2,6 +2,7 @@
 %{
 //importaciones
         let tabs="";
+        let traduccion="";
         function UnTabMenos(){
                 tabs.substring(0,tabs.length-1);
         }
@@ -72,7 +73,7 @@
 ","                   return 'coma';  
 
 
-\"[^\"]*\"	   {yytext = yytext.substr(1,yyleng-2); return 'cadena';}
+\"[^\"]*\"	   {return 'cadena';}
 
 [0-9]+("."[0-9])?\b              return 'double';  
 [0-9]+\b			return 'entero';
@@ -101,28 +102,29 @@
 
 %% /* Definición de la gramática */
 
-INICIO:CLASES EOF {$$=$1;return $$;}
+INICIO:CLASES EOF {$$=$1;return {Traduccion:$$};}
 ;
 CLASES: CLASES CLASE    {$$=$1+$2;} 
         |CLASE          {$$=$1;}
 ;
 CLASE: rpublic TCLASS id BLOQUEC {
-        if($2!='interface'){
-                $$=$2+$3+$4;
+        if($2=="interface"){
+                $$=" ";
+        }else{
+        $$=$2+$3+$4;
         }
-        $$='';
 }
-        |error llaveder          {$$='';}
+        |error llaveder          {$$="";}
 ;
-TCLASS: rclass          {$$='class ';}
-        |rinterface     {$$='interface';}
+TCLASS: rclass          {$$="class ";}
+        |rinterface     {$$="interface";}
 ;
-BLOQUEC: llaveizq VARIASIC llaveder     {tabs+='\t';$$=$1+"\n"+$2+"\n"+$3;UnTabMenos();}
+BLOQUEC: llaveizq VARIASIC llaveder     {tabs+="\t";$$=$1+"\n"+$2+"\n"+$3;}
         |llaveizq llaveder              {$$=$1+"\n"+$2;}
 ;
 
 VARIASIC: VARIASIC INSTCLASE    {$$=$1+"\n"+tabs+$2;}
-        |INSTCLASE              {$$="\n"+tabs+$1;}
+        |INSTCLASE              {$$="\n"+tabs+$1;UnTabMenos();}
         
 ;
 
@@ -152,25 +154,25 @@ T_IC:   BLOQUEI         {$$=$1;}
         |puntoycoma     {$$=$1;}                         
 ;
 
-T_FM: rvoid {$$='';}
-        |T {$$='';}
+T_FM: rvoid {$$="";}
+        |T {$$="";}
 ;
-T: rint         {$$='';}
-    |rdouble    {$$='';}
-    |rboolean   {$$='';}
-    |rstring    {$$='';}
-    |rchar      {$$='';}
+T: rint         {$$="";}
+    |rdouble    {$$="";}
+    |rboolean   {$$="";}
+    |rstring    {$$="";}
+    |rchar      {$$="";}
 ;
-PARAMETROS: PARAMETROS coma T id {$$=$2+' '+$4;}
+PARAMETROS: PARAMETROS coma T id {$$=$2+""+$4;}
                 |T id {$$=$2;}
 ;                
 ASIGNACION: id igual EXP {$$=$1+$2+$3;}
 ;
-BLOQUEI: llaveizq INSTRUCCIONES llaveder {tabs+="\t";$$=$1+"\n"+$2+"\n"+tabs+$3;UnTabMenos();}
+BLOQUEI: llaveizq INSTRUCCIONES llaveder {tabs+="\t";$$=$1+"\n"+$2+"\n"+$3;}
         |llaveizq llaveder {$$=$1+"\n"+$2;}
 ;
 INSTRUCCIONES: INSTRUCCIONES INSTRUCCION {$$=$1+"\n"+tabs+$2;}
-                | INSTRUCCION {$$="\n"+$1;}
+                | INSTRUCCION {$$="\n"+tabs+$1;UnTabMenos();}
 ;
 INSTRUCCION: FOR                        {$$=$1;}
                 | WHILE                 {$$=$1;}
@@ -200,7 +202,7 @@ AUM: id masmas     {$$=$1+$2;}
     |id menosmenos {$$=$1+$2;}
 ;
 IMPRIMIR: rprint parizq EXP parder {$$="console.log"+$2+$3+$4;}
-            | rprintln parizq EXP parder {$$="console.log"+$1+$2+$3;}
+            | rprintln parizq EXP parder {$$="console.log"+$2+$3+$4;}
 ;
 FOR: rfor parizq T id igual EXP puntoycoma EXP puntoycoma AUM parder BLOQUEI {
         $$=$1+$2+"let "+$4+$5+$6+$7+$8+$9+$10+$11+$12;

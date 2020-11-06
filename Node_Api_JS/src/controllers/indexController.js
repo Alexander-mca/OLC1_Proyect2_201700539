@@ -9,7 +9,8 @@ class IndexController{
     }
     async Analisis(req,res){
         var documento=req.body.Value.toString();
-
+        console.log("***************************************\n"+documento);
+        console.log("------------------Si entra a Analisis en js------------------");
         // fs.readFile('/home/alex/Documentos/Cursos Universidad/Compi 1/Lab/Proyecto2/[OLC1]Proyecto2/OLC1_Proyect2_201700539/test/test.java','utf-8'
         // ,(err,data)=>{
         //     if(err) throw res.json({Err:err.message});
@@ -18,15 +19,25 @@ class IndexController{
         // });
          var resultado=Parser.parse(documento);
          var traducion=Trad.parse(documento);
-         var arbol=new Arbol(resultado.AST);
-         var ast=arbol.getContenido();
-         this.Tree(ast);
-         this.ReporteErrores(resultado.Errores);
-         var result={
-             Traduccion:traducion
-         }
-         res.json(result);
+         //var arbol=new Arbol(resultado.AST);
+         //var ast=arbol.getContenido();
+         //this.Tree(ast);
+        //  if(resultado.Errores!=undefined){
+        //     this.ReporteErrores(resultado.Errores);
+        //  }
+        
+         console.log("*******************************************\n"+traducion.Traduccion);
+         res.send(traducion.Traduccion);
     }
+    // getErrores(errores){
+    //     var contenido="";
+    //     errores.forEach(err => {
+    //         contenido+="\nTipo Error:"+err[0]+" Descripcion:"+err[1]+"</td>"
+    //         " Linea:"+err[2]+" Columna:"+err[3];
+    //         cont++;
+    //     });
+    //     return contenido;
+    // }
     ReporteErrores(errores){
         var cont=0;
         var contenido="<html>\n<head>\n<title>Errores</title>\n</head>"+

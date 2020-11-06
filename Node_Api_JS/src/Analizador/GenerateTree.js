@@ -3,8 +3,8 @@ class Arbol{
     constructor(raiz){
         this.cont=0;
         this.contenido="digraph D{node[shape=circle fillcolor=green style=filled];\n";
-        this.getNodos(raiz,contenido);
-        this.getRelacion(raiz,contenido);
+        this.getNodos(raiz,this.contenido);
+        this.getRelacion(raiz,this.contenido);
         this.contenido+="}";
         
     }

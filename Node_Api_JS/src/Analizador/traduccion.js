@@ -84,7 +84,7 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
-this.$=$$[$0-1];return this.$;
+this.$=$$[$0-1];return {Traduccion:this.$};
 break;
 case 2: case 21: case 46: case 47: case 49: case 51: case 52: case 53: case 54: case 62: case 63: case 71: case 75: case 87:
 this.$=$$[$0-1]+$$[$0];
@@ -94,23 +94,24 @@ this.$=$$[$0];
 break;
 case 4:
 
-        if($$[$0-2]!='interface'){
-                this.$=$$[$0-2]+$$[$0-1]+$$[$0];
+        if($$[$0-2]=="interface"){
+                this.$=" ";
+        }else{
+        this.$=$$[$0-2]+$$[$0-1]+$$[$0];
         }
-        this.$='';
 
 break;
-case 5: case 28: case 29: case 30: case 31: case 32: case 33: case 34:
-this.$='';
+case 5: case 16: case 24: case 25: case 28: case 29: case 30: case 31: case 32: case 33: case 34: case 57: case 58: case 97:
+this.$="";
 break;
 case 6:
-this.$='class ';
+this.$="class ";
 break;
 case 7:
-this.$='interface';
+this.$="interface";
 break;
-case 8:
-tabs+='\t';this.$=$$[$0-2]+"\n"+$$[$0-1]+"\n"+$$[$0];UnTabMenos();
+case 8: case 38:
+tabs+="\t";this.$=$$[$0-2]+"\n"+$$[$0-1]+"\n"+$$[$0];
 break;
 case 9: case 39:
 this.$=$$[$0-1]+"\n"+$$[$0];
@@ -118,11 +119,8 @@ break;
 case 10: case 40:
 this.$=$$[$0-1]+"\n"+tabs+$$[$0];
 break;
-case 11:
-this.$="\n"+tabs+$$[$0];
-break;
-case 16: case 24: case 25: case 57: case 58: case 97:
-this.$="";
+case 11: case 41:
+this.$="\n"+tabs+$$[$0];UnTabMenos();
 break;
 case 17:
 this.$="var "+$$[$0];
@@ -140,16 +138,10 @@ case 23:
 this.$="\nfunction "+$$[$0-3]+$$[$0-2]+$$[$0-1]+$$[$0];
 break;
 case 35:
-this.$=$$[$0-2]+' '+$$[$0];
+this.$=$$[$0-2]+""+$$[$0];
 break;
 case 37: case 80: case 81: case 82: case 83: case 84: case 85: case 88: case 89: case 90: case 91:
 this.$=$$[$0-2]+$$[$0-1]+$$[$0];
-break;
-case 38:
-tabs+="\t";this.$=$$[$0-2]+"\n"+$$[$0-1]+"\n"+tabs+$$[$0];UnTabMenos();
-break;
-case 41:
-this.$="\n"+$$[$0];
 break;
 case 48:
 this.$=$$[$0-2]+" "+$$[$0-1]+$$[$0];
@@ -157,11 +149,8 @@ break;
 case 60:
 this.$=$$[$0-2]+$$[$0-1]+" "+$$[$0];
 break;
-case 64:
+case 64: case 65:
 this.$="console.log"+$$[$0-2]+$$[$0-1]+$$[$0];
-break;
-case 65:
-this.$="console.log"+$$[$0-3]+$$[$0-2]+$$[$0-1];
 break;
 case 66:
 
@@ -440,6 +429,7 @@ _handle_error:
 
 //importaciones
         let tabs="";
+        let traduccion="";
         function UnTabMenos(){
                 tabs.substring(0,tabs.length-1);
         }
@@ -877,7 +867,7 @@ case 51:return 'punto';
 break;
 case 52:return 25;  
 break;
-case 53:yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2); return 88;
+case 53:return 88;
 break;
 case 54:return 91;  
 break;

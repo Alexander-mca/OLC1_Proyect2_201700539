@@ -59,10 +59,13 @@ var IndexController = /** @class */ (function () {
             var documento, resultado;
             return __generator(this, function (_a) {
                 documento = req.body.Value.toString();
+                console.log("*****************************************\n" + documento);
+                console.log("si entra a Analisis en py");
                 lexpython_1.scanner.ejecutar(documento);
                 resultado = sintacticopy_1.default.ejecutar(lexpython_1.scanner);
-                this.ReporteTokens(lexpython_1.scanner.tokens);
-                res.json({ Traduccion: resultado.Traduccion });
+                //this.ReporteTokens(scanner.tokens);
+                console.log(resultado.Traduccion);
+                res.send(resultado.Traduccion);
                 return [2 /*return*/];
             });
         });

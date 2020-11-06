@@ -14,9 +14,9 @@ class Server{
         this.routes();
     }
     config():void{
-        this.app.use(bodyParser.json());
         this.app.set('port',port);//el process es para que si ya existe un puerto definido se toma eso
-        this.app.set('ip',ip);
+        //this.app.set('ip',ip);
+        this.app.use(express.json());
         this.app.use(morgan('dev'));//el dev es para ver lo que estan pidiendo los clientes
         this.app.use(cors());//pedir los datos del servidor
         this.app.use(bodyParser.json());//para que entienda el formato json y guarda en un req.body
@@ -24,10 +24,9 @@ class Server{
     }
     routes():void{
         this.app.use('/', indexRoutes);
-        //this.app.use('/', apiRoutes);
     }
     start():void{//inicializa el servidor -> para que empiece a escuchar
-        this.app.listen(this.app.get('ip'),this.app.get('port'),async()=>{
+        this.app.listen(this.app.get('port'),async()=>{
             //console.log('IP: %s PORT: %d', ip, port);
             console.log('Server on Port %d',port);
         });

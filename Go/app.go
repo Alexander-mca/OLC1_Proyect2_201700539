@@ -8,13 +8,14 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strings"
 )
 
 const port = ""
 const ip = ""
 
 type Texto struct {
-	Value string `json:"value"`
+	Value string
 }
 
 var nodeURLJS = ""
@@ -81,8 +82,8 @@ func index(w http.ResponseWriter, r *http.Request) {
 }
 
 func getInfo(w http.ResponseWriter, r *http.Request) {
-	var url = "localhost:3080/Data"
-	var urlpy = "localhost:3000/Data"
+	var url = "http://localhost:3080/Data/"
+	var urlpy = "http://localhost:3000/Data/"
 
 	var decoder = json.NewDecoder(r.Body)
 	var c Texto
@@ -90,8 +91,12 @@ func getInfo(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-
+	c.Value = strings.ReplaceAll(c.Value, "\n", "\\n")
+	c.Value = strings.ReplaceAll(c.Value, "\"", "\\\"")
+	c.Value = strings.ReplaceAll(c.Value, "\r", "\\r")
+	c.Value = strings.ReplaceAll(c.Value, "\t", "\\t")
 	var jsonStr = []byte(`{"Value":"` + c.Value + `"}`)
+	fmt.Println(string(jsonStr))
 	//Aqui se hace la peticion a la api rest js
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
 	req.Header.Set("Content-Type", "application/json")
@@ -106,26 +111,26 @@ func getInfo(w http.ResponseWriter, r *http.Request) {
 	bodyBytesjs, _ := ioutil.ReadAll(resp.Body)
 	Datajs := string(bodyBytesjs)
 	//aqui se hace la peticion a la api rest py
-	req, err = http.NewRequest("POST", urlpy, bytes.NewBuffer(jsonStr))
-	req.Header.Set("Content-Type", "application/json")
+	req2, err2 := http.NewRequest("POST", urlpy, bytes.NewBuffer(jsonStr))
+	req2.Header.Set("Content-Type", "application/json")
 
-	client = &http.Client{}
-	resp, err = client.Do(req)
-	if err != nil {
-		panic(err)
+	client2 := &http.Client{}
+	resp2, err2 := client2.Do(req2)
+	if err2 != nil {
+		panic(err2)
 	}
 
-	defer resp.Body.Close()
-	bodyBytespy, _ := ioutil.ReadAll(resp.Body)
+	defer resp2.Body.Close()
+	bodyBytespy, _ := ioutil.ReadAll(resp2.Body)
 	datapy := string(bodyBytespy)
 	//guardamos las respuestas en un struct
 	response := DataResponse{Javascript: Datajs, Python: datapy}
+
 	respjson, error2 := json.Marshal(response)
 	if error2 != nil {
 		fmt.Printf(error2.Error())
 	}
 	fmt.Println(string(respjson))
-	fmt.Println("Se queda en getInfo")
 	fmt.Fprintf(w, string(respjson))
 }
 

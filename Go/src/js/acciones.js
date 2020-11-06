@@ -66,7 +66,6 @@ function doClick() {
       var contents = file.target.result;
       var nombre=document.getElementById('file-input').files[0].name;
       var name=nombre.split(".");
-      console.log(name[0]);
       displayContents(name[0],contents);        
     };
     reader.readAsText(file);
@@ -126,13 +125,15 @@ function ObtenerTexto(){
 function view(response){
     var js=response.Javascript;
     var py=response.Python;
+    console.log("--------------------------------------\n"+js);
+    console.log("--------------------------------------\n"+py);
     var consolapy=document.getElementById('cmdpy');
     var consolajs=document.getElementById('cmdjs');
     consolapy.removeAttribute('disabled');
     consolajs.removeAttribute('disabled');
-    consolapy.textContent = py.Traduccion;
-    consolajs.textContent=js.Traduccion;
+    consolapy.value = py;
+    consolajs.value = js;
     consolajs.setAttribute('disabled','');
     consolapy.setAttribute('disabled','');
-    console.log("Si entró");
+    console.log("Si ***********************************\n");
 }

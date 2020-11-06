@@ -54,9 +54,9 @@ var Server = /** @class */ (function () {
         this.routes();
     }
     Server.prototype.config = function () {
-        this.app.use(body_parser_1.default.json());
         this.app.set('port', port); //el process es para que si ya existe un puerto definido se toma eso
-        this.app.set('ip', ip);
+        //this.app.set('ip',ip);
+        this.app.use(express_1.default.json());
         this.app.use(morgan_1.default('dev')); //el dev es para ver lo que estan pidiendo los clientes
         this.app.use(cors_1.default()); //pedir los datos del servidor
         this.app.use(body_parser_1.default.json()); //para que entienda el formato json y guarda en un req.body
@@ -64,11 +64,10 @@ var Server = /** @class */ (function () {
     };
     Server.prototype.routes = function () {
         this.app.use('/', indexRoutes_1.default);
-        //this.app.use('/', apiRoutes);
     };
     Server.prototype.start = function () {
         var _this = this;
-        this.app.listen(this.app.get('ip'), this.app.get('port'), function () { return __awaiter(_this, void 0, void 0, function () {
+        this.app.listen(this.app.get('port'), function () { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 //console.log('IP: %s PORT: %d', ip, port);
                 console.log('Server on Port %d', port);
