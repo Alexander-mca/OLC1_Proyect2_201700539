@@ -12,7 +12,7 @@
 %%
 
 \s+											// se ignoran espacios en blanco
-"/\/".*					return 'comentarioSimple';					// comentario simple línea
+[/][/].*					return 'comentarioSimple';					// comentario simple línea
 [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]	return 'comentarioMulti';		// comentario multiple líneas
 
 "int"          return 'rint';
@@ -168,11 +168,11 @@ PARAMETROS: PARAMETROS coma T id {$$=$2+""+$4;}
 ;                
 ASIGNACION: id igual EXP {$$=$1+$2+$3;}
 ;
-BLOQUEI: llaveizq INSTRUCCIONES llaveder {tabs+="\t";$$=$1+"\n"+$2+"\n"+$3;}
+BLOQUEI: llaveizq INSTRUCCIONES llaveder {tabs+="\t";$$=$1+$2+"\n"+$3;}
         |llaveizq llaveder {$$=$1+"\n"+$2;}
 ;
-INSTRUCCIONES: INSTRUCCIONES INSTRUCCION {$$=$1+"\n"+tabs+$2;}
-                | INSTRUCCION {$$="\n"+tabs+$1;UnTabMenos();}
+INSTRUCCIONES: INSTRUCCIONES INSTRUCCION {$$=$1+"\n"+$2;}
+                | INSTRUCCION {$$="\n"+$1;UnTabMenos();}
 ;
 INSTRUCCION: FOR                        {$$=$1;}
                 | WHILE                 {$$=$1;}

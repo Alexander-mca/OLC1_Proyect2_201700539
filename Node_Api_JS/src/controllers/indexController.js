@@ -31,8 +31,8 @@ class IndexController{
     }
     async MostrarArbol(req,res){    
         if(fs.existsSync('arbol.svg')){   
-        var imagen=fs.readFileSync('arbol.svg', 'utf-8');
-        res.send(imagen);
+            var imagen=fs.readFileSync('arbol.svg', 'utf-8');
+            res.send(imagen);
         }
        
     }

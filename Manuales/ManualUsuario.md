@@ -1,3 +1,0 @@
-#Manual de Usuario
-
-###

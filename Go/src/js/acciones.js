@@ -25,9 +25,28 @@ function AgregarVentana(){
   text.setAttribute("id","pestania"+cont);
   text.setAttribute("rows","21");
   text.setAttribute("cols","60");
+  text.setAttribute('style','display:none;max-height:34rem;');
+  text.setAttribute('class','ta');
   div.appendChild(text);
   content.appendChild(div);
-  cont2=cont;
+  try{
+  var act=document.getElementById('tab'+cont);
+  var tact=document.getElementById('pestania'+cont);
+  while (act.firstChild) {
+    act.removeChild(act.firstChild);
+  }
+  act.appendChild(tact);
+  var editor=CodeMirror(act, {
+        lineNumbers: true,
+        value: tact.value,
+        matchBrackets: true,
+        styleActiveLine: true,
+        theme: "eclipse",
+        mode: "text/x-java"
+    }).on('change', editor => {
+        tact.value=editor.getValue();
+    });
+  }catch(error){}
   cont++;
   return link;
 }
@@ -47,6 +66,20 @@ function CambiarText(e){
     
   }
 }
+var tab=document.getElementById('tab1');
+            var editor=CodeMirror(tab, {
+                lineNumbers: true,
+                value: "",
+                matchBrackets: true,
+                styleActiveLine: true,
+                theme: "eclipse",
+                extend:true,
+                tabSize:20,
+                smartIndent:true,
+                mode: "text/x-java"
+            }).on('change', editor => {
+                tab.children[0].value=editor.getValue();
+            });
 function eliminarTab(tab){
 
   var nombre=tab.getAttribute("href");
@@ -77,22 +110,23 @@ function doClick() {
       e.click();
     }
   }
-  function readSingleFile(e) {
-    var file = e.target.files[0];
-    if (!file) {
-      return;
-    }
-    
-    var reader = new FileReader();
-    reader.onload = function(file) {
-      var contents = file.target.result;
-      var nombre=document.getElementById('file-input').files[0].name;
-      var name=nombre.split(".");
-      displayContents(name[0],contents);        
-    };
-    reader.readAsText(file);
+function readSingleFile(e) {
+  var file = e.target.files[0];
+  if (!file) {
+    return;
   }
   
+  var reader = new FileReader();
+  reader.onload = function(file) {
+    var contents = file.target.result;
+    var nombre=document.getElementById('file-input').files[0].name;
+    var name=nombre.split(".");
+    displayContents(name[0],contents);
+    pActual=name[0];   
+  };
+  reader.readAsText(file);
+}
+
  
   function displayContents(nombre,contents){
     var content=document.getElementById('headerp');
@@ -111,13 +145,34 @@ function doClick() {
                aux=chl.innerText;
                chl.innerText=nombre+".java";
                var sub=aux.substring(3,aux.lenght);
-               var info=document.getElementById(aux);
-                 info.setAttribute("id",nombre);
-                 var data=document.getElementById("pestania"+sub);
+               
                  
-                 if(data!=null){
-                   data.textContent=contents;
-                 }
+                   try {
+                    var act=document.getElementById(aux);
+                    act.setAttribute("id",nombre);
+                    var tact=document.getElementById("pestania"+sub);                 
+                    tact.value=contents;
+                    while (act.firstChild) {
+                        act.removeChild(act.firstChild);
+                    }
+            
+                    act.appendChild(tact);
+                    var editor=CodeMirror(act, {
+                        lineNumbers: true,
+                        value: tact.value,
+                        matchBrackets: true,
+                        styleActiveLine: true,                        
+                        extend:true,
+                        tabSize:20,
+                        smartIndent:true,
+                        indentWithTabs:true,
+                        theme: "eclipse",
+                        mode: "text/x-java"
+                    }).on('change', editor => {
+                        tact.value=editor.getValue();
+                    });
+                }catch(error) {}
+                 
                return null;
             }
           });
@@ -125,14 +180,13 @@ function doClick() {
     });
   }
 document.getElementById('file-input').addEventListener('change',readSingleFile,false);
-var cont2=1;
+var cont2=0;
 
 function ObtenerTexto(){
   var url="../Analiza";
   var divtexto=document.getElementById(pActual);
   console.log(pActual);
   var texto=divtexto.children[0];
-  console.log(texto.value);
   var valor={"Value":texto.value}
   var defaultBody={
     method:'POST',
@@ -141,26 +195,26 @@ function ObtenerTexto(){
       "Content-Type":"application/json"
     }
   };
-  function download(filename, text) {
-    var pom = document.createElement('a');
-    pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-    pom.setAttribute('download', filename);
-
-    if (document.createEvent) {
-        var event = document.createEvent('MouseEvents');
-        event.initEvent('click', true, true);
-        pom.dispatchEvent(event);
-    }
-    else {
-        pom.click();
-    }
-}
+  
   fetch(url,defaultBody).then(res=>res.json())
   .catch(error => console.log('Error:', error))
   .then(response => view(response));
 
 }
+function download(filename, text) {
+  var pom = document.createElement('a');
+  pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+  pom.setAttribute('download', filename);
 
+  if (document.createEvent) {
+      var event = document.createEvent('MouseEvents');
+      event.initEvent('click', true, true);
+      pom.dispatchEvent(event);
+  }
+  else {
+      pom.click();
+  }
+}
 function view(response){
     var js=response.Javascript;
     var py=response.Python;
@@ -170,6 +224,8 @@ function view(response){
     var consolajs=document.getElementById('cmdjs');
     consolapy.removeAttribute('disabled');
     consolajs.removeAttribute('disabled');
+    consolajs.value ="";
+    consolapy.value="";
     consolapy.value = py;
     consolajs.value = js;
     consolajs.setAttribute('disabled','');
@@ -179,42 +235,47 @@ function view(response){
     window.open("http://localhost:3000/Tokens","Tokens");
     window.open("http://localhost:3080/ErroresJS","ErroresJS");
     window.open("http://localhost:3000/ErroresPY","ErroresPY");
+    cont2++;
 }
-function downloadTraduccionJs(){
+async function downloadTraduccionJs(){
   var consolajs=document.getElementById('cmdjs');
   consolajs.removeAttribute('disabled');
   var contenido=consolajs.value;
   var blob=new Blob([contenido],{type:"text/plain;charset=utf-8"});
   var date=new Date();
   var fecha=""+date.getDay()+date.getMonth()+date.getFullYear()+date.getMilliseconds();
-  download(fecha+".js",blob);
+  //saveAs(blob,fecha+".js");
+  download(fecha+".js",contenido);
   consolapy.setAttribute('disabled','');
 }
 function guardar(){
-  var cmdjava=document.getElementById('cmdjs');
-  var contenido=cmdjava.value;
+  var cmdjava=document.getElementById(pActual);
+  var contenido=cmdjava.children[0].value;
   var blob=new Blob([contenido],{type:"text/plain;charset=utf-8"});
-  download(pActual+".java",blob);
+  //saveAs(blob,fecha+".js");
+  download(pActual+".java",contenido);
 }
 function guardarComo(){
   var nombre=prompt("Por favor ingrese el nombre del archivo:","");
   if(nombre!=null || nombre!=""){
-    var cmdjava=document.getElementById('cmdjs');
-    var contenido=cmdjava.value;
+    var cmdjava=document.getElementById(pActual);
+    var contenido=cmdjava.children[0].value;
     var blob=new Blob([contenido],{type:"text/plain;charset=utf-8"});
-    download(nombre+".java",blob);
+    //saveAs(blob,nombre+".js");
+    download(nombre+".java",contenido);
   }else{
     alert("No ingreso ningun nombre para el archivo");
   }
 }
-function downloadTraduccionPy(){
+async function downloadTraduccionPy(){
   var consolapy=document.getElementById('cmdpy');
   consolapy.removeAttribute('disabled');
-  var contenido=consolajs.value;
+  var contenido=consolapy.value;
   var blob=new Blob([contenido],{type:"text/plain;charset=utf-8"});
   var date=new Date();
   var fecha=""+date.getDay()+date.getMonth()+date.getFullYear()+date.getMilliseconds();
-  download(fecha+".py",blob);
+  //saveAs(blob,fecha+".py");
+  download(fecha+".py",contenido);
   consolapy.setAttribute('disabled','');
 }
 function downloadTraducciones(){
@@ -239,38 +300,48 @@ function DownloadTokens(){
   var defaultBody={
     method:'GET',
     headers:{
-      "Content-Type":"application/json"
+      "Content-Type":"text/html"
     }
   };
 
-  fetch(url,defaultBody).then(res=>res.json())
+  fetch(url,defaultBody).then(res=>res.text())
   .catch(error => console.log('Error:', error))
-  .then(response => Err_(response));
+  .then(response => Tokens_(response));
 }
 function DownloadTree(){
   var url="../arbol";
   var defaultBody={
     method:'GET',
     headers:{
-      "Content-Type":"application/json"
+      "Content-Type":"text/plain"
     }
   };
 
-  fetch(url,defaultBody).then(res=>res.json())
+  fetch(url,defaultBody).then(res=>res.text())
   .catch(error => console.log('Error:', error))
   .then(response => Arbol(response));
 }
 function Arbol(response){
-  var blob=new Blob([response],{type:"text/plain;charset=utf-8"});
-  download("ArbolSintactico.svg",blob);
+  //var blob=new Blob([response],{type:"text/plain;charset=utf-8"});
+  //saveAs(blob,"ArbolSintacito.svg");
+  var valor=response;
+  console.log(valor);
+  download("ArbolSintactico"+cont2+".svg",valor);
 }
 function Tokens_(response){
-  var blob=new Blob([response],{type:"text/html;charset=utf-8"});
-  download("Tokens.html",blob);
+  //var blob=new Blob([response],{type:"text/html;charset=utf-8"});
+  //saveAs(blob,"tokens.html");
+  var valor=response;
+  download("Tokens"+cont2+".html",valor);
 }
 function Err_(response){
-  var blob=new Blob([response.JS],{type:"text/html;charset=utf-8"});
-  download("ErroresJs.html",blob);
-  var blob2=new Blob([response.Py],{type:"text/html;charset=utf-8"});
-  download("ErroresPy.html",blob2);
+//   var blob=new Blob([response.JS],{type:"text/html;charset=utf-8"});
+//  //saveAs(blob,"ErroresJs.html");
+//   var blob2=new Blob([response.Py],{type:"text/html;charset=utf-8"});
+  //saveAs(blob2,"ErroresPy.html");
+  var js=response.Js;
+  var py=response.Py;
+  download("ErroresJs"+cont2+".html",js);
+  download("ErroresPy"+cont2+".html",py);
 }
+

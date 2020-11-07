@@ -32,7 +32,7 @@ type Report struct {
 	ErroresPy string
 }
 type Error struct {
-	JS string
+	Js string
 	Py string
 }
 
@@ -92,7 +92,7 @@ func main() {
 func Arbol(w http.ResponseWriter, r *http.Request) {
 	var url1 = "http://localhost:3080/arbol"
 	req, err := http.NewRequest("GET", url1, nil)
-	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Content-Type", "text/plain")
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
@@ -103,14 +103,14 @@ func Arbol(w http.ResponseWriter, r *http.Request) {
 	defer resp.Body.Close()
 	bodyBytesjs, _ := ioutil.ReadAll(resp.Body)
 	arbol := string(bodyBytesjs)
-	fmt.Println(arbol)
+	//fmt.Println(arbol)
 	fmt.Fprintf(w, arbol)
 }
 func Tokens(w http.ResponseWriter, r *http.Request) {
 	var url = "http://localhost:3000/Tokens"
 
 	req, err := http.NewRequest("GET", url, nil)
-	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Content-Type", "text/html")
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
@@ -121,15 +121,15 @@ func Tokens(w http.ResponseWriter, r *http.Request) {
 	defer resp.Body.Close()
 	bodyBytesjs, _ := ioutil.ReadAll(resp.Body)
 	tokens_ := string(bodyBytesjs)
-	fmt.Println(tokens_)
+	//fmt.Println(tokens_)
 	fmt.Fprintf(w, tokens_)
 }
 func Errores(w http.ResponseWriter, r *http.Request) {
-	var url2 = "http://localhost:3080/Errores"
-	var url4 = "http://localhost:3000/Errores"
+	var url2 = "http://localhost:3080/ErroresJS"
+	var url4 = "http://localhost:3000/ErroresPY"
 	//peticion 2
 	req, err := http.NewRequest("GET", url2, nil)
-	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Content-Type", "text/html")
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
@@ -142,7 +142,7 @@ func Errores(w http.ResponseWriter, r *http.Request) {
 	erroresjs := string(bodyBytesjs)
 	//peticion 3 errores py
 	req, err = http.NewRequest("GET", url4, nil)
-	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Content-Type", "text/html")
 
 	client = &http.Client{}
 	resp, err = client.Do(req)
@@ -153,7 +153,7 @@ func Errores(w http.ResponseWriter, r *http.Request) {
 	defer resp.Body.Close()
 	bodyBytesjs, _ = ioutil.ReadAll(resp.Body)
 	errorespy := string(bodyBytesjs)
-	var valores = Error{JS: erroresjs, Py: errorespy}
+	var valores = Error{Js: erroresjs, Py: errorespy}
 	respjson, error2 := json.Marshal(valores)
 	if error2 != nil {
 		fmt.Printf(error2.Error())
@@ -216,7 +216,7 @@ func getInfo(w http.ResponseWriter, r *http.Request) {
 	if error2 != nil {
 		fmt.Printf(error2.Error())
 	}
-	fmt.Println(string(respjson))
+	//fmt.Println(string(respjson))
 	fmt.Fprintf(w, string(respjson))
 }
 
