@@ -54,7 +54,7 @@ class Parser{
             }
             if(tipo==Tipo.comentarioMulti){
                 //comentario multiple
-                this.traduccion+="\n"+this.tabs+"'''"+tk.lexema.substring(2,tk.lexema.length-2)+"'''\n";
+                this.traduccion+="\n"+this.tabs+"'''"+tk.lexema.substring(2,tk.lexema.length-3)+"'''\n";
                 this.getNext();
                 var val=this.Match(tk_tipo,descripcion);
                 return val;   
@@ -97,15 +97,16 @@ class Parser{
     CLASE(){
         var tk:Token|undefined;
         this.Match(Tipo.rpublic,"Se esperaba la palabra Reservada 'public' ");
-        this.TCLASS();
+        var val=this.TCLASS();
+        
         tk=this.Match(Tipo.id,"Se esperaba un id ")
-        if(tk!=undefined){
-            this.tabs+="\t";
-            this.traduccion+=tk.lexema;
-        }
-        this.BLOQUEC();
-        //elimina un tab
-        this.UnTabMenos();
+            if(tk!=undefined ){
+                this.tabs+="\t";
+                this.traduccion+=tk.lexema;
+            }
+            this.BLOQUEC();
+            //elimina un tab
+            this.UnTabMenos();
     }
     UnTabMenos(){
         if(this.tabs.length==0){
@@ -118,11 +119,11 @@ class Parser{
         var tipo=this.preanalisis.tipo;
         if(tipo==Tipo.rclass){
             tk=this.Match(Tipo.rclass,"Se esperaba la palabra reservada 'Class' ");
+            this.traduccion+="\nclass ";
+            return "class";
         }else if(tipo==Tipo.rinterface){
             tk=this.Match(Tipo.rinterface,"Se esperaba la palabra reservada 'Interface' ");
-        }
-        if(tk!=undefined){
-            this.traduccion+="class ";
+            return "interface";
         }
     }
     BLOQUEC(){
@@ -147,14 +148,8 @@ class Parser{
             return;
         }else if(tp==Tipo.rint || tp==Tipo.rstring || tp==Tipo.rdouble || tp==Tipo.rchar || tp==Tipo.rboolean){
             tk=this.T();
-            if(tk!=undefined){
-                this.traduccion+=this.tabs+"var ";
-            }
             this.DECLARACION();
             tk=this.Match(Tipo.puntoycoma,"Se esperaba un ';' ");
-            if(tk!=undefined){
-                this.traduccion+="\n";
-            }
             this.INSTCLASE();
         }else if(tp==Tipo.comentarioMulti){
             //comentario multiple
@@ -259,7 +254,7 @@ class Parser{
     DECLARACION(){
         var tk:Token|undefined=this.Match(Tipo.id,"Se esperaba un id ");
         if(tk!=undefined){
-            this.traduccion+=tk.lexema;
+            this.traduccion+="\n"+this.tabs+tk.lexema;
         }
         this.ASIGNACION();
         this.VAL2();
@@ -410,11 +405,7 @@ class Parser{
                 break;
             default:
                 tk=this.T();
-                if(tk!=undefined){
-                    this.traduccion+="\n"+this.tabs+"var ";
-                }
-                this.DECLARACION();
-                
+                this.DECLARACION();                
                 this.Match(Tipo.puntoycoma,"Se esperaba ';' ");
                 break;
         }

@@ -50,7 +50,7 @@ var Parser = /** @class */ (function () {
         }
         if (tipo == lexpython_1.Tipo.comentarioMulti) {
             //comentario multiple
-            this.traduccion += "\n" + this.tabs + "'''" + tk.lexema.substring(2, tk.lexema.length - 2) + "'''\n";
+            this.traduccion += "\n" + this.tabs + "'''" + tk.lexema.substring(2, tk.lexema.length - 3) + "'''\n";
             this.getNext();
             var val = this.Match(tk_tipo, descripcion);
             return val;
@@ -91,7 +91,7 @@ var Parser = /** @class */ (function () {
     Parser.prototype.CLASE = function () {
         var tk;
         this.Match(lexpython_1.Tipo.rpublic, "Se esperaba la palabra Reservada 'public' ");
-        this.TCLASS();
+        var val = this.TCLASS();
         tk = this.Match(lexpython_1.Tipo.id, "Se esperaba un id ");
         if (tk != undefined) {
             this.tabs += "\t";
@@ -112,12 +112,12 @@ var Parser = /** @class */ (function () {
         var tipo = this.preanalisis.tipo;
         if (tipo == lexpython_1.Tipo.rclass) {
             tk = this.Match(lexpython_1.Tipo.rclass, "Se esperaba la palabra reservada 'Class' ");
+            this.traduccion += "\nclass ";
+            return "class";
         }
         else if (tipo == lexpython_1.Tipo.rinterface) {
             tk = this.Match(lexpython_1.Tipo.rinterface, "Se esperaba la palabra reservada 'Interface' ");
-        }
-        if (tk != undefined) {
-            this.traduccion += "class ";
+            return "interface";
         }
     };
     Parser.prototype.BLOQUEC = function () {
@@ -143,14 +143,8 @@ var Parser = /** @class */ (function () {
         }
         else if (tp == lexpython_1.Tipo.rint || tp == lexpython_1.Tipo.rstring || tp == lexpython_1.Tipo.rdouble || tp == lexpython_1.Tipo.rchar || tp == lexpython_1.Tipo.rboolean) {
             tk = this.T();
-            if (tk != undefined) {
-                this.traduccion += this.tabs + "var ";
-            }
             this.DECLARACION();
             tk = this.Match(lexpython_1.Tipo.puntoycoma, "Se esperaba un ';' ");
-            if (tk != undefined) {
-                this.traduccion += "\n";
-            }
             this.INSTCLASE();
         }
         else if (tp == lexpython_1.Tipo.comentarioMulti) {
@@ -253,7 +247,7 @@ var Parser = /** @class */ (function () {
     Parser.prototype.DECLARACION = function () {
         var tk = this.Match(lexpython_1.Tipo.id, "Se esperaba un id ");
         if (tk != undefined) {
-            this.traduccion += tk.lexema;
+            this.traduccion += "\n" + this.tabs + tk.lexema;
         }
         this.ASIGNACION();
         this.VAL2();
@@ -403,9 +397,6 @@ var Parser = /** @class */ (function () {
                 break;
             default:
                 tk = this.T();
-                if (tk != undefined) {
-                    this.traduccion += "\n" + this.tabs + "var ";
-                }
                 this.DECLARACION();
                 this.Match(lexpython_1.Tipo.puntoycoma, "Se esperaba ';' ");
                 break;

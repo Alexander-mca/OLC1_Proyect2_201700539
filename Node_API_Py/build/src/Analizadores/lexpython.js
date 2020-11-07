@@ -340,7 +340,9 @@ var Scanner = /** @class */ (function () {
                         fila++;
                         columna = 1;
                     }
-                    estado = 8;
+                    else {
+                        estado = 8;
+                    }
                     break;
                 case 11:
                     lexema += c;

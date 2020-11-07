@@ -10,6 +10,7 @@ function AgregarVentana(){
   link.setAttribute("data-toggle","tab");
   link.setAttribute("href","#tab"+cont);
   link.setAttribute("ondragend","eliminarTab(this);");
+  link.setAttribute("onfocus","CambiarText(this);");
   link.innerText="tab"+cont;
   tab.appendChild(link);
   tabs.appendChild(tab);
@@ -26,26 +27,47 @@ function AgregarVentana(){
   text.setAttribute("cols","60");
   div.appendChild(text);
   content.appendChild(div);
+  cont2=cont;
   cont++;
   return link;
 }
+var pActual="tab1";
+function CambiarText(e){
+  var name=e.getAttribute('href');
+  name=name.replace("#","");
+  var content=document.getElementById("myTabContent");
+  var tabs=content.children;
+  for (let i = 0; i < tabs.length; i++) {
+    const element = tabs[i];
+    var id=element.getAttribute("id");
+    if(id==name){
+      pActual=id;
+      break;
+    }
+    
+  }
+}
 function eliminarTab(tab){
 
-  var nombre=tab.innerText;
-  var tabs=document.getElementById('headerp');
-  tabs.childNodes.forEach(element => {
-      if(element.firstChild!=null){
-        var name=element.firstChild.innerText;
-        if(nombre==name){
-          element.remove();
-        }
-      }
-      
-  });
-  var content=document.getElementById(nombre);
-  var name=content.getAttribute("id");
-  if(content!=null && name==nombre){
-    content.remove();
+  var nombre=tab.getAttribute("href");
+  var nombre2=nombre.replace("#","");
+  var hijos=document.getElementById('headerp').children;
+  for (let i = 0; i < hijos.length; i++) {
+    const element = hijos[i];
+    var id=element.children[0].getAttribute("href");
+    if(id==nombre){
+      element.remove();
+      break;
+    }   
+  }
+  var content=document.getElementById("myTabContent").children;
+  for (let i = 0; i< content.length; i++) {
+    const element = content[i];
+    var id=element.getAttribute("id");
+    if(nombre2==id){
+      element.remove();
+      break;
+    }
   }
 }
 var cont=2;
@@ -92,6 +114,7 @@ function doClick() {
                var info=document.getElementById(aux);
                  info.setAttribute("id",nombre);
                  var data=document.getElementById("pestania"+sub);
+                 
                  if(data!=null){
                    data.textContent=contents;
                  }
@@ -102,12 +125,15 @@ function doClick() {
     });
   }
 document.getElementById('file-input').addEventListener('change',readSingleFile,false);
-
+var cont2=1;
 
 function ObtenerTexto(){
   var url="../Analiza";
-  var texto=document.getElementById("pestania1").value;
-  var valor={"Value":texto}
+  var divtexto=document.getElementById(pActual);
+  console.log(pActual);
+  var texto=divtexto.children[0];
+  console.log(texto.value);
+  var valor={"Value":texto.value}
   var defaultBody={
     method:'POST',
     body:JSON.stringify(valor),
@@ -115,7 +141,20 @@ function ObtenerTexto(){
       "Content-Type":"application/json"
     }
   };
+  function download(filename, text) {
+    var pom = document.createElement('a');
+    pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    pom.setAttribute('download', filename);
 
+    if (document.createEvent) {
+        var event = document.createEvent('MouseEvents');
+        event.initEvent('click', true, true);
+        pom.dispatchEvent(event);
+    }
+    else {
+        pom.click();
+    }
+}
   fetch(url,defaultBody).then(res=>res.json())
   .catch(error => console.log('Error:', error))
   .then(response => view(response));
@@ -148,14 +187,14 @@ function downloadTraduccionJs(){
   var blob=new Blob([contenido],{type:"text/plain;charset=utf-8"});
   var date=new Date();
   var fecha=""+date.getDay()+date.getMonth()+date.getFullYear()+date.getMilliseconds();
-  saveAs(blob,fecha+".js");
+  download(fecha+".js",blob);
   consolapy.setAttribute('disabled','');
 }
 function guardar(){
   var cmdjava=document.getElementById('cmdjs');
   var contenido=cmdjava.value;
   var blob=new Blob([contenido],{type:"text/plain;charset=utf-8"});
-  saveAs(blob,fecha+".js");
+  download(pActual+".java",blob);
 }
 function guardarComo(){
   var nombre=prompt("Por favor ingrese el nombre del archivo:","");
@@ -163,7 +202,7 @@ function guardarComo(){
     var cmdjava=document.getElementById('cmdjs');
     var contenido=cmdjava.value;
     var blob=new Blob([contenido],{type:"text/plain;charset=utf-8"});
-    saveAs(blob,nombre+".js");
+    download(nombre+".java",blob);
   }else{
     alert("No ingreso ningun nombre para el archivo");
   }
@@ -175,7 +214,7 @@ function downloadTraduccionPy(){
   var blob=new Blob([contenido],{type:"text/plain;charset=utf-8"});
   var date=new Date();
   var fecha=""+date.getDay()+date.getMonth()+date.getFullYear()+date.getMilliseconds();
-  saveAs(blob,fecha+".py");
+  download(fecha+".py",blob);
   consolapy.setAttribute('disabled','');
 }
 function downloadTraducciones(){
@@ -223,15 +262,15 @@ function DownloadTree(){
 }
 function Arbol(response){
   var blob=new Blob([response],{type:"text/plain;charset=utf-8"});
-  saveAs(blob,"ArbolSintacito.svg");
+  download("ArbolSintactico.svg",blob);
 }
 function Tokens_(response){
   var blob=new Blob([response],{type:"text/html;charset=utf-8"});
-  saveAs(blob,"tokens.html");
+  download("Tokens.html",blob);
 }
 function Err_(response){
   var blob=new Blob([response.JS],{type:"text/html;charset=utf-8"});
-  saveAs(blob,"ErroresJs.html");
+  download("ErroresJs.html",blob);
   var blob2=new Blob([response.Py],{type:"text/html;charset=utf-8"});
-  saveAs(blob2,"ErroresPy.html");
+  download("ErroresPy.html",blob2);
 }

@@ -334,9 +334,9 @@ class Scanner{
                 }else if(c=='\n'){
                     fila++;
                     columna=1;
-                }
+                }else{
                 estado=8;
-                
+                }
                 break;
                 
             case 11:
