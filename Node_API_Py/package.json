@@ -6,8 +6,8 @@
   "scripts": {
     "build": "tsc -w",
     "dev": "nodemon build/src/index.js",
-    "docker":"docker build -t alexandermca/nodewebpy:2.1 .",
-    "image":"docker run  -it -p 3000:3000 alexandermca/nodewebpy:2.0"
+    "docker":"docker build -t alexandermca/nodewebpy:2.3 .",
+    "image":"docker run  -it -p 3000:3000 alexandermca/nodewebpy:2.3"
   },
   "author": "",
   "license": "ISC",

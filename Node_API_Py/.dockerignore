@@ -4,3 +4,5 @@ Dockerfile
 .dockerignore
 src
 tsconfig.json
+errores.html
+tokens.html

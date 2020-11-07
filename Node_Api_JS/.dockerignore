@@ -3,3 +3,6 @@ npm-debug.log
 Dockerfile
 .dockerignore
 parser.jison
+errores.html
+arbol.txt
+arbol.svg

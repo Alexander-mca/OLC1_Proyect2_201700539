@@ -25,6 +25,16 @@ type DataResponse struct {
 	Javascript string
 	Python     string
 }
+type Report struct {
+	Arbol     string
+	ErroresJS string
+	Tokens    string
+	ErroresPy string
+}
+type Error struct {
+	JS string
+	Py string
+}
 
 func main() {
 
@@ -71,11 +81,87 @@ func main() {
 	http.Handle("/", fs)
 	//http.HandleFunc("/", index)
 	http.HandleFunc("/Analiza", getInfo)
+	http.HandleFunc("/Errores", Errores)
+	http.HandleFunc("/arbol", Arbol)
+	http.HandleFunc("/Tokens", Tokens)
 
 	fmt.Println("Server on " + ip + ":" + port)
 	http.ListenAndServe(":"+port, nil)
 }
 
+func Arbol(w http.ResponseWriter, r *http.Request) {
+	var url1 = "http://localhost:3080/arbol"
+	req, err := http.NewRequest("GET", url1, nil)
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+
+	defer resp.Body.Close()
+	bodyBytesjs, _ := ioutil.ReadAll(resp.Body)
+	arbol := string(bodyBytesjs)
+	fmt.Println(arbol)
+	fmt.Fprintf(w, arbol)
+}
+func Tokens(w http.ResponseWriter, r *http.Request) {
+	var url = "http://localhost:3000/Tokens"
+
+	req, err := http.NewRequest("GET", url, nil)
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+
+	defer resp.Body.Close()
+	bodyBytesjs, _ := ioutil.ReadAll(resp.Body)
+	tokens_ := string(bodyBytesjs)
+	fmt.Println(tokens_)
+	fmt.Fprintf(w, tokens_)
+}
+func Errores(w http.ResponseWriter, r *http.Request) {
+	var url2 = "http://localhost:3080/Errores"
+	var url4 = "http://localhost:3000/Errores"
+	//peticion 2
+	req, err := http.NewRequest("GET", url2, nil)
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+
+	defer resp.Body.Close()
+	bodyBytesjs, _ := ioutil.ReadAll(resp.Body)
+	erroresjs := string(bodyBytesjs)
+	//peticion 3 errores py
+	req, err = http.NewRequest("GET", url4, nil)
+	req.Header.Set("Content-Type", "application/json")
+
+	client = &http.Client{}
+	resp, err = client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+
+	defer resp.Body.Close()
+	bodyBytesjs, _ = ioutil.ReadAll(resp.Body)
+	errorespy := string(bodyBytesjs)
+	var valores = Error{JS: erroresjs, Py: errorespy}
+	respjson, error2 := json.Marshal(valores)
+	if error2 != nil {
+		fmt.Printf(error2.Error())
+	}
+	fmt.Println(string(respjson))
+	fmt.Fprintf(w, string(respjson))
+
+}
 func index(w http.ResponseWriter, r *http.Request) {
 	t := template.Must(template.ParseFiles("./src/index.html"))
 	t.Execute(w, "")

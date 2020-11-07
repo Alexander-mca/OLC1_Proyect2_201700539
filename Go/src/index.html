@@ -23,24 +23,24 @@
                     Abrir
                     </a>
                     <a class="dropdown-item"  onclick="AgregarVentana();">Nuevo</a>
-                    <a class="dropdown-item" >Guardar</a>
-                    <a class="dropdown-item" >Guardar Como</a>
+                    <a class="dropdown-item" onclick="guardar();">Guardar</a>
+                    <a class="dropdown-item" onclick="guardarComo();" >Guardar Como</a>
                   </div>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Descargar</a>
                     <div class="dropdown-menu">
-                      <a class="dropdown-item" href="#">Ambos</a>
-                      <a class="dropdown-item" href="#">JavaScript</a>
-                      <a class="dropdown-item" href="#">Python</a>
+                      <a class="dropdown-item" onclick="downloadTraducciones();">Ambos</a>
+                      <a class="dropdown-item" onclick="downloadTraduccionJs();">JavaScript</a>
+                      <a class="dropdown-item" onclick="downloadTraduccionPy();">Python</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Reportes</a>
                     <div class="dropdown-menu">
-                      <a class="dropdown-item" href="#">Errores</a>
-                      <a class="dropdown-item" href="#">Tokens</a>
-                      <a class="dropdown-item" href="#">Arbol Sintactico</a>
+                      <a class="dropdown-item" href="#" onclick="downloadErrores();">Errores</a>
+                      <a class="dropdown-item" href="#" onclick="DownloadTokens();">Tokens</a>
+                      <a class="dropdown-item" href="#" onclick="DownloadTree();">Arbol Sintactico</a>
                     </div>
                 </li>
                 <li class="nav-item">

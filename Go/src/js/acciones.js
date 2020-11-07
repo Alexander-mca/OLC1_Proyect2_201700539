@@ -141,3 +141,97 @@ function view(response){
     window.open("http://localhost:3080/ErroresJS","ErroresJS");
     window.open("http://localhost:3000/ErroresPY","ErroresPY");
 }
+function downloadTraduccionJs(){
+  var consolajs=document.getElementById('cmdjs');
+  consolajs.removeAttribute('disabled');
+  var contenido=consolajs.value;
+  var blob=new Blob([contenido],{type:"text/plain;charset=utf-8"});
+  var date=new Date();
+  var fecha=""+date.getDay()+date.getMonth()+date.getFullYear()+date.getMilliseconds();
+  saveAs(blob,fecha+".js");
+  consolapy.setAttribute('disabled','');
+}
+function guardar(){
+  var cmdjava=document.getElementById('cmdjs');
+  var contenido=cmdjava.value;
+  var blob=new Blob([contenido],{type:"text/plain;charset=utf-8"});
+  saveAs(blob,fecha+".js");
+}
+function guardarComo(){
+  var nombre=prompt("Por favor ingrese el nombre del archivo:","");
+  if(nombre!=null || nombre!=""){
+    var cmdjava=document.getElementById('cmdjs');
+    var contenido=cmdjava.value;
+    var blob=new Blob([contenido],{type:"text/plain;charset=utf-8"});
+    saveAs(blob,nombre+".js");
+  }else{
+    alert("No ingreso ningun nombre para el archivo");
+  }
+}
+function downloadTraduccionPy(){
+  var consolapy=document.getElementById('cmdpy');
+  consolapy.removeAttribute('disabled');
+  var contenido=consolajs.value;
+  var blob=new Blob([contenido],{type:"text/plain;charset=utf-8"});
+  var date=new Date();
+  var fecha=""+date.getDay()+date.getMonth()+date.getFullYear()+date.getMilliseconds();
+  saveAs(blob,fecha+".py");
+  consolapy.setAttribute('disabled','');
+}
+function downloadTraducciones(){
+  downloadTraduccionJs();
+  downloadTraduccionPy();
+}
+function downloadErrores(){
+  var url="../Errores";
+  var defaultBody={
+    method:'GET',
+    headers:{
+      "Content-Type":"application/json"
+    }
+  };
+
+  fetch(url,defaultBody).then(res=>res.json())
+  .catch(error => console.log('Error:', error))
+  .then(response => Err_(response));
+}
+function DownloadTokens(){
+  var url="../Tokens";
+  var defaultBody={
+    method:'GET',
+    headers:{
+      "Content-Type":"application/json"
+    }
+  };
+
+  fetch(url,defaultBody).then(res=>res.json())
+  .catch(error => console.log('Error:', error))
+  .then(response => Err_(response));
+}
+function DownloadTree(){
+  var url="../arbol";
+  var defaultBody={
+    method:'GET',
+    headers:{
+      "Content-Type":"application/json"
+    }
+  };
+
+  fetch(url,defaultBody).then(res=>res.json())
+  .catch(error => console.log('Error:', error))
+  .then(response => Arbol(response));
+}
+function Arbol(response){
+  var blob=new Blob([response],{type:"text/plain;charset=utf-8"});
+  saveAs(blob,"ArbolSintacito.svg");
+}
+function Tokens_(response){
+  var blob=new Blob([response],{type:"text/html;charset=utf-8"});
+  saveAs(blob,"tokens.html");
+}
+function Err_(response){
+  var blob=new Blob([response.JS],{type:"text/html;charset=utf-8"});
+  saveAs(blob,"ErroresJs.html");
+  var blob2=new Blob([response.Py],{type:"text/html;charset=utf-8"});
+  saveAs(blob2,"ErroresPy.html");
+}

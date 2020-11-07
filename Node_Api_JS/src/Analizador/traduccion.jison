@@ -205,7 +205,7 @@ IMPRIMIR: rprint parizq EXP parder {$$="console.log"+$2+$3+$4;}
             | rprintln parizq EXP parder {$$="console.log"+$2+$3+$4;}
 ;
 FOR: rfor parizq T id igual EXP puntoycoma EXP puntoycoma AUM parder BLOQUEI {
-        $$=$1+$2+"let "+$4+$5+$6+$7+$8+$9+$10+$11+$12;
+        $$=$1+$2+"var "+$4+$5+$6+$7+$8+$9+$10+$11+$12;
 }
 ;
 WHILE: rwhile parizq EXP parder BLOQUEI {$$=$1+$2+$3+$4+$5;}
