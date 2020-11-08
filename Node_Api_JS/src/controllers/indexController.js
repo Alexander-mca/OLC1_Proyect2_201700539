@@ -33,6 +33,8 @@ class IndexController{
         if(fs.existsSync('arbol.svg')){   
             var imagen=fs.readFileSync('arbol.svg', 'utf-8');
             res.send(imagen);
+        }else{
+
         }
        
     }
@@ -41,7 +43,7 @@ class IndexController{
             var err=fs.readFileSync('errores.html', 'utf-8');
             res.send(err);
         }else{
-            res.json({Info:"No hubieron errores"});
+            res.send("window.alert('Surgieron errores a la hora de generar el archivo.')");
         }
     }
     
