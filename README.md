@@ -1,14 +1,16 @@
 ## Manual Tecnico
 
-#### Comandos Importantes
+#### Notas
 - Las peticiones se hacen de js->go->nodejs  nodejs->go->js
 
 - Utilizar eclipse para colorear codemirror
 
 * Comandos para subir las imagenes a docker hub:
->sudo docker login
->sudo docker tag node:v1 user/node:v1
->sudo docker push user/node:v1
+	```
+	sudo docker login
+	sudo docker tag node:v1 user/node:v1
+	sudo docker push user/node:v1
+	```
 
 #### Requisitos
 - [Docker en la versión más reciente](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04-es "Docker en la versión más reciente")
@@ -396,7 +398,8 @@ VALOR::=cadena
 [![GUI](Imagenes/inicioweb.png "GUI")](http://Imagenes/inicioweb.png "GUI")
 
 #### Opciones
-- **Opción 1**
+- **Opción 1:**
+	
 	[![Opcion1](Imagenes/archivos.png "Opcion1")](http://Images/archivos.png "Opcion1")
 	- **Abrir:**
 		Esta opción le permitira abrir archivos con extensión .java dentro del area del editor (Opcion 5)
@@ -406,7 +409,8 @@ VALOR::=cadena
 		Esta opción le permitira guardar lo que tenga escrito en el editor actual. Se guardara con el nombre que tenga la pestaña.
 	- **Guardar Como:**
 		Esta opción le permitira guardar lo que tenga escrito en el editor actual, solo que le preguntará antes por el nombre con el que quiere guardar el archivo. Seguira siendo con extension .java.
-- **Opción 2**
+- **Opción 2:**
+	
 	[![Opcion2](Imagenes/descargas.png "Opcion2")](http://Imagenes/descargas.png "Opcion2")
 	- **Ambos:**
 		Esta opción descargará dos archivos, uno .py que contendra la traduccion a Python de lo analizado y otro .js con la traducción al lenguaje javascript.
@@ -414,7 +418,8 @@ VALOR::=cadena
 		Descargara un archivo .js con la traduccion a Javascript de lo analizado.
 	- **Python:**
 		Descargará un archivo .py con la traducción a Python de lo analizado.
-- **Opción 3**
+- **Opción 3:**
+	
 	[![Opcion3](Imagenes/reportes.png "Opcion3")](http://Imagenes/reportes.png "Opcion3")
 	- **Errores:**
 		Esta opción descargará dos archivo html con la información de los errores que surgieron durante el analisis lexico sintactico de la información del editor (Opcion 5), uno provendra de la API-REST que contiene el analizador hecho con jison y el otro de la API-REST que contiene los analizadores hechos con typescript.

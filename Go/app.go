@@ -104,7 +104,7 @@ func Arbol(w http.ResponseWriter, r *http.Request) {
 	defer resp.Body.Close()
 	bodyBytesjs, _ := ioutil.ReadAll(resp.Body)
 	arbol := string(bodyBytesjs)
-	//fmt.Println(arbol)
+	fmt.Println(arbol)
 	fmt.Fprintf(w, arbol)
 }
 func Tokens(w http.ResponseWriter, r *http.Request) {
