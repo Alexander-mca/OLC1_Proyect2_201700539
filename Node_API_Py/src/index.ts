@@ -3,7 +3,7 @@ import morgan from 'morgan';//se pueden ver las peticiones que se hacen
 import cors from 'cors';
 import indexRoutes from './routes/indexRoutes';
 import bodyParser from 'body-parser';
-const ip   = process.env.NODEIPPY || "127.18.7.7";
+const ip   = process.env.NODEIPPY || "182.18.7.7";
 const port = process.env.NODEPORTPY || 3000;
 
 class Server{
@@ -15,7 +15,7 @@ class Server{
     }
     config():void{
         this.app.set('port',port);//el process es para que si ya existe un puerto definido se toma eso
-        //this.app.set('ip',ip);
+        this.app.set('ip',ip);
         this.app.use(express.json());
         this.app.use(morgan('dev'));//el dev es para ver lo que estan pidiendo los clientes
         this.app.use(cors());//pedir los datos del servidor
@@ -27,8 +27,8 @@ class Server{
     }
     start():void{//inicializa el servidor -> para que empiece a escuchar
         this.app.listen(this.app.get('port'),async()=>{
-            //console.log('IP: %s PORT: %d', ip, port);
-            console.log('Server on Port %d',port);
+            console.log('IP: %s PORT: %d', ip, port);
+            //console.log('Server on Port %d',port);
         });
     }
 }

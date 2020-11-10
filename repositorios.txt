@@ -1,4 +1,0 @@
-https://github.com/Alexander-mca/OLC1_Proyect2_201700539
-https://hub.docker.com/repository/docker/alexandermca/goweb
-https://hub.docker.com/repository/docker/alexandermca/nodewebpy
-https://hub.docker.com/repository/docker/alexandermca/nodewebjs

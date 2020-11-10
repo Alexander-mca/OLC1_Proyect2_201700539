@@ -43,35 +43,35 @@ func main() {
 	nodeport, defport := os.LookupEnv("NODEPORTJS")
 
 	if !defip {
-		nodeip = "127.18.7.5:"
+		nodeip = "182.18.7.5"
 	}
 
 	if !defport {
 		nodeport = "3080"
 	}
 
-	nodeURLJS = nodeip + nodeport
+	nodeURLJS = nodeip + ":" + nodeport
 
 	//================= NODE API PY =================//
 	nodeip, defip = os.LookupEnv("NODEIPPY")
 	nodeport, defport = os.LookupEnv("NODEPORTPY")
 
 	if !defip {
-		nodeip = "127.18.7.7:"
+		nodeip = "182.18.7.7"
 	}
 
 	if !defport {
 		nodeport = "3000"
 	}
 
-	nodeURLPY = nodeip + nodeport
+	nodeURLPY = nodeip + ":" + nodeport
 
 	//==================== GO ====================//
 	ip, defip := os.LookupEnv("GOIP")
 	port, defport := os.LookupEnv("GOPORT")
 
 	if !defip {
-		ip = "localhost"
+		ip = "182.18.7.9"
 	}
 
 	if !defport {
@@ -90,7 +90,8 @@ func main() {
 }
 
 func Arbol(w http.ResponseWriter, r *http.Request) {
-	var url1 = "http://localhost:3080/arbol"
+	//var url1 = "http://localhost:3080/arbol"
+	var url1 = "http://" + nodeURLJS + "/arbol"
 	req, err := http.NewRequest("GET", url1, nil)
 	req.Header.Set("Content-Type", "text/plain")
 
@@ -107,8 +108,8 @@ func Arbol(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, arbol)
 }
 func Tokens(w http.ResponseWriter, r *http.Request) {
-	var url = "http://localhost:3000/Tokens"
-
+	//var url = "http://localhost:3000/Tokens"
+	var url = "http://" + nodeURLPY + "/Tokens"
 	req, err := http.NewRequest("GET", url, nil)
 	req.Header.Set("Content-Type", "text/html")
 
@@ -125,8 +126,10 @@ func Tokens(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, tokens_)
 }
 func Errores(w http.ResponseWriter, r *http.Request) {
-	var url2 = "http://localhost:3080/ErroresJS"
-	var url4 = "http://localhost:3000/ErroresPY"
+	//var url2 = "http://localhost:3080/ErroresJS"
+	//var url4 = "http://localhost:3000/ErroresPY"
+	var url2 = "http://" + nodeURLJS + "/ErroresJS"
+	var url4 = "http://" + nodeURLPY + "/ErroresPY"
 	//peticion 2
 	req, err := http.NewRequest("GET", url2, nil)
 	req.Header.Set("Content-Type", "text/html")
@@ -168,8 +171,10 @@ func index(w http.ResponseWriter, r *http.Request) {
 }
 
 func getInfo(w http.ResponseWriter, r *http.Request) {
-	var url = "http://localhost:3080/Data/"
-	var urlpy = "http://localhost:3000/Data/"
+	// var url = "http://localhost:3080/Data/"
+	// var urlpy = "http://localhost:3000/Data/"
+	var url = "http://" + nodeURLJS + "/Data/"
+	var urlpy = "http://" + nodeURLPY + "/Data/"
 
 	var decoder = json.NewDecoder(r.Body)
 	var c Texto

@@ -1,3 +1,5 @@
+var urljs="182.18.7.5:3080";
+var urlpy="182.18.7.7:3000";
 function AgregarVentana(){
   var tabs=document.getElementById('headerp');
   var tab=document.createElement('li');
@@ -231,10 +233,10 @@ function view(response){
     consolajs.setAttribute('disabled','');
     consolapy.setAttribute('disabled','');
     console.log("Si ***********************************\n");
-    window.open("http://localhost:3080/Arbol","Arbol");
-    window.open("http://localhost:3000/Tokens","Tokens");
-    window.open("http://localhost:3080/ErroresJS","ErroresJS");
-    window.open("http://localhost:3000/ErroresPY","ErroresPY");
+    window.open("http://"+urljs+"/Arbol","Arbol");
+    window.open("http://"+urlpy+"/Tokens","Tokens");
+    window.open("http://"+urljs+"/ErroresJS","ErroresJS");
+    window.open("http://"+urlpy+"/ErroresPY","ErroresPY");
     cont2++;
 }
 async function downloadTraduccionJs(){

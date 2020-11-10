@@ -6,8 +6,8 @@
   "scripts": {
     "build":"tsc -w",
     "start":"go run app.go",
-    "docker":"docker build -t alexandermca/goweb:2.3 .",
-    "image":"docker run -d -p 8000:8080 alexandermca/goweb:2.0"
+    "docker":"docker build -t alexandermca/goweb:2.6 .",
+    "image":"docker run -it -p 8080:8080 alexandermca/goweb:2.4"
   },
   "author": "Alex Morales",
   "license": "ISC"
